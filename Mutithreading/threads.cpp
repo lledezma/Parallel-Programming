@@ -1,3 +1,5 @@
+		//Add two arrays and store the new values in a new array. Calculate the min value in
+		// the new generated array.
 #include <iostream>
 #include <thread>
 #include <mutex>
