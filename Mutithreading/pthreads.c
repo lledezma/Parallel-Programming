@@ -50,6 +50,7 @@ void *mySum(void* threadid){
 		printf("%ld , ", c[(long)threadid * size + i] );
 	}
 	printf("\n");
+	return NULL;
 }
 
 void *minVal(void* threadid){
@@ -65,4 +66,5 @@ void *minVal(void* threadid){
 			c[(long)threadid*size+(size-1)] = c[(long)threadid*size+i];
 		}
 	}
+	return NULL;
 }
