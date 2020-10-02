@@ -56,13 +56,14 @@ int main()
 }
 
 void mySum(int thread_id, int size){
+	int idx;
 	mylock.lock();
 	cout << "Hello from thread: " << thread_id << endl;
-	
 	for(int i =0; i < size;i++)
 	{
-		c[thread_id*size+i] = a[thread_id*size+i] + b[thread_id*size+i];
-		cout << a[thread_id*size+i] << " + " << b[thread_id*size+i] << " = " << c[thread_id*size+i] << " | " << "........" << thread_id*size+i << endl;
+		idx = thread_id*size+i;
+		c[idx] = a[idx] + b[idx];
+		cout << a[idx] << " + " << b[idx] << " = " << c[idx] << " | " << "........" << idx << endl;
 		this_thread::sleep_for(5ms);
 	}
 	mylock.unlock();
@@ -70,25 +71,22 @@ void mySum(int thread_id, int size){
 
 void myMin(int thread_id, int size)
 {
+	int idx;
 	mylock.lock();
 	for(int i =0; i < size;i++)
 	{
+		idx = thread_id*size+i;
 		if(i == size-1)
 		{
-			if(c[thread_id*size+i] < c[n-1]){
-				c[n-1] = c[thread_id*size+i];
+			if(c[idx] < c[n-1]){
+				c[n-1] = c[idx];
 			}
 		}
-		else if (c[thread_id*size+i] < c[thread_id*size+size-1])
+		else if (c[idx] < c[thread_id*size+size-1])
 		{
-			c[thread_id*size+size-1] = c[thread_id*size+i];
+			c[thread_id*size+size-1] = c[idx];
 		}
 		this_thread::sleep_for(5ms);
 	}
 	mylock.unlock();
 }
-
-// for(int i = 0; i < size; i++)
-// {
-// 	reveseArray[i] = myArray[n-1-(thread_id*size+i)];
-// }

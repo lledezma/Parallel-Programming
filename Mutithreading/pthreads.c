@@ -45,9 +45,12 @@ int main(){
 void *mySum(void* threadid){
 	printf("Hello from thread: %ld\n", (long) threadid);
 	int size = n/num_of_threads;
+	int idx;
+	long thread_id = (long)threadid;
 	for(long i = 0; i < size; i++){
-		c[(long)threadid * size + i] = a[(long)threadid * size + i] + b[(long)threadid * size + i];
-		printf("%ld , ", c[(long)threadid * size + i] );
+		idx = thread_id*size+i;
+		c[idx] = a[idx] + b[idx];
+		printf("%ld , ", c[idx] );
 	}
 	printf("\n");
 	return NULL;
@@ -55,15 +58,18 @@ void *mySum(void* threadid){
 
 void *minVal(void* threadid){
 	int size = n/num_of_threads;
+	int idx;
+	long thread_id = (long)threadid;
 	for(long i = 0; i<size; i++){
+		idx = thread_id*size+i;
 		if(i == size-1){
 			pthread_mutex_lock(&pmutex);
-			if (c[(long)threadid*size+i] < c[n-1])
-				c[n-1] = c[(long)threadid*size+i];
+			if (c[idx] < c[n-1])
+				c[n-1] = c[idx];
 			pthread_mutex_unlock(&pmutex);
 		}
-		else if(c[(long)threadid*size+i] < c[(long)threadid*size+(size-1)]){
-			c[(long)threadid*size+(size-1)] = c[(long)threadid*size+i];
+		else if(c[idx] < c[(long)threadid*size+(size-1)]){
+			c[(long)threadid*size+(size-1)] = c[idx];
 		}
 	}
 	return NULL;
