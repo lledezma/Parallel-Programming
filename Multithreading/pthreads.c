@@ -38,7 +38,7 @@ int main(){
 	for(i =	0; i< num_of_threads; i++)
 		pthread_join(thread[i], NULL);
 
-	printf("the min value is: %ld\n", c[n-1]);
+	printf("the min value is: %d\n", c[n-1]);
 	return 0;
 }
 
@@ -50,7 +50,7 @@ void *mySum(void* threadid){
 	for(long i = 0; i < size; i++){
 		idx = thread_id*size+i;
 		c[idx] = a[idx] + b[idx];
-		printf("%ld , ", c[idx] );
+		printf("%d , ", c[idx] );
 	}
 	printf("\n");
 	return NULL;
