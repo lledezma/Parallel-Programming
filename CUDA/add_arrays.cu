@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cuda_runtime.h>
+
 __global__ void add(int *a, int *b, int *c, int Num) {
   int thread_id = threadIdx.x; 
   if (thread_id < Num){ //compare thread index to make sure we don't go out of bound
       c[thread_id] = a[thread_id] + b[thread_id];
   }
 }
+
 int main() {
   int Num = 50;
   int h_a[Num], h_b[Num], h_c[Num]; //declaring host variables

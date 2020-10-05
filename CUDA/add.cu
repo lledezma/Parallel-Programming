@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cuda_runtime.h>
+
 __global__ void add(int *d_a, int *d_b, int *d_result) {
       *d_result = *d_a + *d_b;
 }
+
 int main() {
   //declarre host variables
   int h_a = 50;
