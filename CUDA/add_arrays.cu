@@ -30,7 +30,7 @@ int main() {
   cudaMemcpy(d_a,h_a, Num*sizeof(int),cudaMemcpyHostToDevice);
   cudaMemcpy(d_b,h_b, Num*sizeof(int),cudaMemcpyHostToDevice);
 
-  //Launch Kernel (one block with N threads)
+  //Launch Kernel 
   add<<<1,Num>>>(d_a,d_b,d_c,Num);
 
   //copy device results to host results
