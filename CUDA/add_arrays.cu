@@ -36,8 +36,8 @@ int main() {
   //copy device results to host results
   cudaMemcpy(h_c,d_c, Num*sizeof(int),cudaMemcpyDeviceToHost);
 
-  for(int i = 1;i <= Num; i++){  //print results
-      printf("%d\n", h_c[i-1]);
+  for(int i = 0;i < Num; i++){  //print results
+      printf("%d\n", h_c[i]);
   }
 
   //free device memory
