@@ -4,9 +4,11 @@
 #include <cuda_runtime.h>
 
 __global__ void add(int *a, int *b, int *c, int Num) {
-  int thread_id = threadIdx.x; 
-  if (thread_id < Num){ //compare thread index to make sure we don't go out of bound
-      c[thread_id] = a[thread_id] + b[thread_id];
+  // int idx = threadIdx.x;             // for a grid with one block of threads
+  int idx = threadIdx.x + blockIdx.x * blockDim.x
+  if (thread_id < Num){     //comparing bounds
+      // c[idx] = a[idx] + b[idx];      // for a grid with one block of threads
+      c[idx] = a[idx] + b[idx];
   }
 }
 
@@ -31,7 +33,8 @@ int main() {
   cudaMemcpy(d_b,h_b, Num*sizeof(int),cudaMemcpyHostToDevice);
 
   //Launch Kernel 
-  add<<<1,Num>>>(d_a,d_b,d_c,Num);
+  // add<<<1,Num>>>(d_a,d_b,d_c,Num);      //A grid with one block and Num=50 threads
+  add<<<2,Num/2>>>(d_a,d_b,d_c,Num);       //A grid with two blocks, 50/2 threads per block
 
   //copy device results to host results
   cudaMemcpy(h_c,d_c, Num*sizeof(int),cudaMemcpyDeviceToHost);
