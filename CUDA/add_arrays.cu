@@ -7,7 +7,6 @@ __global__ void add(int *a, int *b, int *c, int Num) {
   // int idx = threadIdx.x;             // for a grid with one block of threads
   int idx = threadIdx.x + blockIdx.x * blockDim.x
   if (thread_id < Num){     //comparing bounds
-      // c[idx] = a[idx] + b[idx];      // for a grid with one block of threads
       c[idx] = a[idx] + b[idx];
   }
 }
