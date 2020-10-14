@@ -68,8 +68,8 @@ void *minVal(void* threadid){
 				c[n-1] = c[idx];
 			pthread_mutex_unlock(&pmutex);
 		}
-		else if(c[idx] < c[(long)threadid*size+(size-1)]){
-			c[(long)threadid*size+(size-1)] = c[idx];
+		else if(c[idx] < c[thread_id*size+(size-1)]){
+			c[thread_id*size+(size-1)] = c[idx];
 		}
 	}
 	return NULL;
