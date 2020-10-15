@@ -14,9 +14,9 @@ __global__ void add(int *a, int *b, int *c, int Num) {
 int main() {
   int Num = 50;
   int h_a[Num], h_b[Num], h_c[Num]; //declaring host variables
-  int *d_a, *d_b, *d_c;             //declaring device variable
+  int *d_a, *d_b, *d_c;             //declaring device variables
 
-  //Memory allocation of device variable
+  //Memory allocation of device variables
   cudaMalloc((void**)&d_a, Num*sizeof(int));
   cudaMalloc((void**)&d_b, Num*sizeof(int));
   cudaMalloc((void**)&d_c, Num*sizeof(int));
