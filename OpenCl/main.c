@@ -128,9 +128,9 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = 12; //number of global work iterms
-    localWorkSize = 2;  //number of work items per group
-                        //12/2 = 6 work groups
+    globalWorkSize = cpuUnits(); //number of global work items
+    localWorkSize = 2;           // number of work items per group
+                                 // 12/2 = 6 work groups
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
@@ -171,6 +171,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
+//Max compute units
 int cpuUnits(){
     int err;
     cl_device_id device_id;
