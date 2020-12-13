@@ -29,8 +29,8 @@ int main(int argc, const char * argv[]) {
     cl_command_queue queue;
     cl_program program;
     cl_kernel kernel;
-    size_t globalWorkSize;  //total number of work groups
-    size_t localWorkSize;   //total number of work items
+    size_t globalWorkSize;  //global work items
+    size_t localWorkSize;   //work items per group
 
     const int num = 12;     //size of arrays
     
@@ -127,9 +127,9 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = cpuUnits(); //number of global work iterms
-    localWorkSize = 2;  //number of work items per group
-                        //12/2 = 6 work groups
+    globalWorkSize = cpuUnits(); //number of global work items
+    localWorkSize = 2;           //number of work items per group
+                                 //cpuUnits()/2 = # of work groups
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
