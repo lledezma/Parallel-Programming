@@ -1,4 +1,3 @@
-                    //Simple parallel program to add to two 1-dimension arrays
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -30,10 +29,10 @@ int main(int argc, const char * argv[]) {
     cl_command_queue queue;
     cl_program program;
     cl_kernel kernel;
-    size_t globalWorkSize;  //total number of global work items
-    size_t localWorkSize;   //total number of work items per group
+    size_t globalWorkSize;  //total number of work groups
+    size_t localWorkSize;   //total number of work items
 
-    const int num = 10;     //size of arrays
+    const int num = 12;     //size of arrays
     
     //declaring device variables
     cl_mem d_a;
@@ -128,9 +127,9 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = cpuUnits(); //number of global work items
-    localWorkSize = 2;           // number of work items per group
-                                 // 12/2 = 6 work groups
+    globalWorkSize = cpuUnits(); //number of global work iterms
+    localWorkSize = 2;  //number of work items per group
+                        //12/2 = 6 work groups
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
@@ -149,11 +148,15 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    //print results
+///*   print info and data
+    size_t valueSize;
+    char* deviceName = (char*)malloc(sizeof(valueSize));
+    clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, deviceName, NULL);
+    printf("Running on device: %s with %d computer units.\n", deviceName, cpuUnits());
     for(int i = 0; i < num; i++){
-        printf("%d\n", h_c[i]);
+        printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
-    
+//*/
     //release device memory
     clReleaseMemObject(d_a);
     clReleaseMemObject(d_b);
@@ -171,7 +174,6 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-//Max compute units
 int cpuUnits(){
     int err;
     cl_device_id device_id;
@@ -185,3 +187,4 @@ int cpuUnits(){
         return EXIT_FAILURE;
     return maxComputeUnits;
 }
+
