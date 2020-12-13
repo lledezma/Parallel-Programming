@@ -152,7 +152,7 @@ int main(int argc, const char * argv[]) {
     size_t valueSize;
     char* deviceName = (char*)malloc(sizeof(valueSize));
     clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, deviceName, NULL);
-    printf("Running on device: %s with %d computer units.\n", deviceName, cpuUnits());
+    printf("Running on device: %s with %d compute units.\n", deviceName, cpuUnits());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
