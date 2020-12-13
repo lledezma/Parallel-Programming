@@ -51,9 +51,9 @@ int main(int argc, const char * argv[]) {
     h_b = (int*)malloc(bytes);
     h_c = (int*)malloc(bytes);
     
-    for(int i = 1; i <= num; i++){
-        h_a[i] = i;
-        h_b[i] = i;
+    for(int i = 0; i < num; i++){
+        h_a[i] = i+1;
+        h_b[i] = i+1;
     }
     // # of platform IDs || platform || # of OpenCL platforms available
     err = clGetPlatformIDs(1, &platform, NULL);
@@ -151,7 +151,7 @@ int main(int argc, const char * argv[]) {
     
     //print results
     for(int i = 0; i < num; i++){
-        printf("%d, ", h_c[i]);
+        printf("%d\n", h_c[i]);
     }
     
     //release device memory
