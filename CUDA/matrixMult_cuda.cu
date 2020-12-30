@@ -49,7 +49,7 @@ int main(){
 	
 	unsigned int gridRows = (rowA + BLOCK_SIZE - 1) / BLOCK_SIZE;
 	unsigned int gridCols = (colB + BLOCK_SIZE - 1) / BLOCK_SIZE;
-	dim3 dimGrid(1, 1);
+	dim3 dimGrid(gridCols, gridRows);
 	dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
 
 	//Launch our Kernel
