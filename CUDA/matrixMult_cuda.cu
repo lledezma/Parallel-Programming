@@ -1,3 +1,4 @@
+		//multiplication of two matrices using a kernel with a 2d grid and 2d blocks
 #include <stdio.h>
 #include <stdlib.h>
 #include <cuda_runtime.h>
