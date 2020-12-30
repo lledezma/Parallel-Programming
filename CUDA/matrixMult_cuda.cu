@@ -46,7 +46,7 @@ int main(){
 	cudaMemcpy(d_A,h_A, (colA*rowA)*sizeof(int), cudaMemcpyHostToDevice);
   	cudaMemcpy(d_B,h_B, (colB*rowB)*sizeof(int), cudaMemcpyHostToDevice);
 
-	
+	//Declaring our 2D grid with 2D blocks and dimensions
 	unsigned int gridRows = (rowA + BLOCK_SIZE - 1) / BLOCK_SIZE;
 	unsigned int gridCols = (colB + BLOCK_SIZE - 1) / BLOCK_SIZE;
 	dim3 dimGrid(gridCols, gridRows);
@@ -58,12 +58,12 @@ int main(){
 	//copy device results to host 
 	cudaMemcpy(h_C,d_C, (colB*rowA)*sizeof(int), cudaMemcpyDeviceToHost);
 
-	// //print our results
+	//print our results
 	for(int i = 0; i < (rowA*colB); i++){
 	  printf("%d\n", h_C[i]);
 	}
 
-	// // free device memory
+	// free device memory
 	cudaFree(d_A);
 	cudaFree(d_B);
 	cudaFree(d_C);
