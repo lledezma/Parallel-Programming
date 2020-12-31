@@ -116,12 +116,12 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    //Initializing device memory
+    //allocating device memory
     d_a = clCreateBuffer(context, CL_MEM_READ_ONLY, (colA*rowA)*sizeof(int), NULL, &err);
     d_b = clCreateBuffer(context, CL_MEM_READ_ONLY, (colB*rowB)*sizeof(int), NULL, &err);
     d_c = clCreateBuffer(context, CL_MEM_READ_WRITE, (colB*rowA)*sizeof(int), NULL, &err);
     if(err != CL_SUCCESS){
-        printf("Error initializing device memory\n");
+        printf("Error allocating device memory\n");
         return EXIT_FAILURE;
     }
     
