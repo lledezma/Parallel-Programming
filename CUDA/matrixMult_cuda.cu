@@ -10,6 +10,7 @@ __global__ void multiMatrix(int* A, int* B, int*C, int colA, int colB, int rowA)
 	int y = blockDim.y * blockIdx.y + threadIdx.y;
 
   	int sum=0;
+	//check bounds
 	if(x < colB && y < rowA){
 		for(int i = 0; i < colA; i++){
 			sum += A[y * colA + i] * B[i * colB + x];
