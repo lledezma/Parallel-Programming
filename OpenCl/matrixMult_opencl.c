@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 const char *KernelSource =                                       "\n" \
-"#pragma OPENCL EXTENSION cl_khr_fp64 : enable                   \n" \
 "__kernel void multiMatrix(  __global int *A,                    \n" \
 "                         __global int *B,                       \n" \
 "                         __global int *C,                       \n" \

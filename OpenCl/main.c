@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 const char *KernelSource =                                       "\n" \
-"#pragma OPENCL EXTENSION cl_khr_fp64 : enable                   \n" \
 "__kernel void addArray(  __global int *a,                       \n" \
 "                       __global int *b,                         \n" \
 "                       __global int *c,                         \n" \
