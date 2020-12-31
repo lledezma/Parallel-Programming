@@ -154,7 +154,7 @@ int main(int argc, const char * argv[]) {
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
     if(err != CL_SUCCESS){
-        printf("%d", err);
+        printf("Error executing the Kernel");
         return EXIT_FAILURE;
     }
     
