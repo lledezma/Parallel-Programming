@@ -15,8 +15,8 @@ const char *KernelSource =                                       "\n" \
 "    int x = get_global_id(0);                                   \n" \
 "    int y = get_global_id(1);                                   \n" \
 "                                                                \n" \
-"    //Check bounds                                              \n" \
 "    int sum = 0;                                                \n" \
+"    //Check bounds                                              \n" \
 "    if(x < colB && y < rowA){                                   \n" \
 "       for(int i = 0; i < colA; ++i){                           \n" \
 "           sum += A[y * colA + i] * B[i * colB + x];            \n" \
