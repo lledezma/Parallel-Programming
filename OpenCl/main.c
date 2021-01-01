@@ -19,7 +19,7 @@ const char *KernelSource =                                       "\n" \
 "        c[idx] = a[idx] + b[idx];                               \n" \
 "}                                                               \n" ;
 
-int cpuUnits();
+int cpuUnits(); //get the max compute units available
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors

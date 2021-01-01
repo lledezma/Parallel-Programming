@@ -25,7 +25,7 @@ const char *KernelSource =                                       "\n" \
 "     }                                                          \n" \
 "}                                                               \n" ;
 
-int gpuUnits();
+int gpuUnits(); //get the max compute units available
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -169,10 +169,6 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print info and data
-    size_t valueSize;
-    char* deviceName = (char*)malloc(sizeof(valueSize));
-    clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, deviceName, NULL);
-    printf("Running on device: %s with %d computer units.\n", deviceName, gpuUnits());
     for(int i = 0; i < colB*rowA; i++){
         printf("%d\n", h_c[i]);
     }
