@@ -168,7 +168,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-///*   print info and data
+///*   print result
     for(int i = 0; i < colB*rowA; i++){
         printf("%d\n", h_c[i]);
     }

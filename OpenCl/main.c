@@ -148,7 +148,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-///*   print info and data
+///*   print device info, compute units, and results
     size_t valueSize;
     char* deviceName = (char*)malloc(sizeof(valueSize));
     clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, deviceName, NULL);
