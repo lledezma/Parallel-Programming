@@ -21,10 +21,10 @@ __global__ void multiMatrix(int* A, int* B, int*C, int colA, int colB, int rowA)
 
 int main(){
 	//rows and columns 
-	int rowA = 2;
-	int colA = 3;
+	int rowA = 15;
+	int colA = 15;
 	int rowB = colA;
-	int colB = 4;
+	int colB = 10;
 
 	//Declaring host variable
 	int h_A[colA*rowA], h_B[colB*rowB], h_C[colB*rowA];

@@ -53,10 +53,10 @@ int main(int argc, const char * argv[]) {
     int* h_c;
     
     //rows and columns
-   const int rowA = 2;
-   const int colA = 3;
+   const int rowA = 15;
+   const int colA = 15;
    const int rowB = colA;
-   const int colB = 4;
+   const int colB = 10;
     
     //initializing host memory
     h_a = (int*)malloc((colA*rowA)*sizeof(int));
