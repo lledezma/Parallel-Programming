@@ -170,7 +170,9 @@ int main(int argc, const char * argv[]) {
     
 ///*   print result
     for(int i = 0; i < colB*rowA; i++){
-        printf("%d\n", h_c[i]);
+        printf("%d ", h_c[i]);
+	if(((i+1) % colB) == 0)
+		printf("\n");
     }
 //*/
     //release device memory

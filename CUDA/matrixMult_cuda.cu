@@ -62,7 +62,9 @@ int main(){
 
 	//print our results
 	for(int i = 0; i < (rowA*colB); i++){
-	  printf("%d\n", h_C[i]);
+	  printf("%d ", h_C[i]);
+	  if(((i+1) % colB) == 0)
+		printf("\n");
 	}
 
 	// free device memory
