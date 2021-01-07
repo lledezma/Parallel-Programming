@@ -18,7 +18,6 @@ int main(int argc, const char * argv[]) {
     size_t globalWorkSize;  //global work items
     size_t localWorkSize;   //work items per group
     
-    
     cl_mem d_pattern;       //host pattern
     cl_mem d_string;        //host string
     cl_mem d_results;       //host to store results
@@ -80,7 +79,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
 
-    kernel = clCreateKernel(program, "addArray", &err);
+    kernel = clCreateKernel(program, "match", &err);
     if(err != CL_SUCCESS){
         printf("error creating the kernel\n");
         return EXIT_FAILURE;

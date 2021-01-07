@@ -1,4 +1,4 @@
-__kernel void addArray(__global char *pattern,                 
+__kernel void match(__global char *pattern,                 
                        __global char *str,                    
                        __global int *results,                    
                        int pSize,                 
