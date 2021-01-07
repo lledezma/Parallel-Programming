@@ -12,13 +12,17 @@ __kernel void match(__global char *pattern,
    {                                                         
        int i;                                                  
        for(i = 0; i < pSize; i++)
-       {                                               
-           if (pattern[i] != str[idx+i]){            
+       {         
+            //if a letter mismatch is found, break from the loop                                      
+           if (pattern[i] != str[idx+i]){          
              break;   
             }                                       
-       }                                                      
+       }  
+
+      //if i == size, that means a match has been found.                                                    
       if(i == pSize) {
-			   atomic_add(results,1); 
+         //add one to results
+			   atomic_add(results,1);  
 		  }                     
     }                                                             
 }                                                               

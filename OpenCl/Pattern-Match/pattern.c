@@ -18,15 +18,17 @@ int main(int argc, const char * argv[]) {
     size_t globalWorkSize;  //global work items
     size_t localWorkSize;   //work items per group
     
-    cl_mem d_pattern;       //host pattern
-    cl_mem d_string;        //host string
-    cl_mem d_results;       //host to store results
+    //device variables
+    cl_mem d_pattern;       //device pattern
+    cl_mem d_string;        //device sequence
+    cl_mem d_results;       //device variable to store results
     
-    int h_results;
-    char* h_pattern = "NNTHVLTLP";
+    //host variables
+    int h_results;          //host variable to store results
+    char* h_pattern = "NNTHVLTLP";      
     char* h_string = "MIVNNTHVLTLPLYTTTTCHTHPHLYTNNTHVLTLPYSIYHLKLTLLSDSTSLHGPSCHTHNNTHVLTLPTHVLTLLTLLSDSTSRWGSK";
-    int h_pSize = (int)strlen(h_pattern);
-    int h_sSize = (int)strlen(h_string);
+    int h_pSize = (int)strlen(h_pattern);       //length of pattern
+    int h_sSize = (int)strlen(h_string);        //length of sequence
 
     // # of platform IDs || platform || # of OpenCL platforms available
     err = clGetPlatformIDs(1, &platform, NULL);
@@ -85,7 +87,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    //allocate device memory
+    //allocate device memory and copy host memory to device memory
     d_pattern = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, h_pSize, h_pattern, &err);
     d_string = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, h_sSize, h_string, &err);
     d_results = clCreateBuffer(context, CL_MEM_READ_WRITE, 1, NULL, &err);
@@ -125,7 +127,9 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    //print the results. The total number of matches. 
     printf("Total number of matches: %d\n", h_results);
+
     //release device memory
     clReleaseMemObject(d_pattern);
     clReleaseMemObject(d_string);
