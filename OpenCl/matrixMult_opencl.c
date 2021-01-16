@@ -58,7 +58,7 @@ int main(int argc, const char * argv[]) {
    const int rowB = colA;
    const int colB = 10;
     
-    //initializing host memory
+    //allocating host memory
     h_a = (int*)malloc((colA*rowA)*sizeof(int));
     h_b = (int*)malloc((colB*rowB)*sizeof(int));
     h_c = (int*)malloc((colB*rowA)*sizeof(int));
