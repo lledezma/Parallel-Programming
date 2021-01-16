@@ -1,5 +1,5 @@
 		//Add two arrays and store the new values in a new array. Calculate the min value in
-		// the new generated array.
+		// the new generated array. Multithreading program
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -55,7 +55,7 @@ int main()
 
 }
 
-void mySum(int thread_id, int size){
+void mySum(int thread_id, int size){	//function to add our arrays
 	int idx;
 	mylock.lock();
 	cout << "Hello from thread: " << thread_id << endl;
@@ -69,7 +69,7 @@ void mySum(int thread_id, int size){
 	mylock.unlock();
 }
 
-void myMin(int thread_id, int size)
+void myMin(int thread_id, int size) //function to find the min value in c array
 {
 	int idx;
 	mylock.lock();

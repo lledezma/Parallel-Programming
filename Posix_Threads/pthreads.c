@@ -1,53 +1,54 @@
+			//Adding two arrays and finding the min value. Using prefix sum algorithm logic
+			//to find min value. Multithreading program using POSIX Threads
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 
 //Global variables and Shared variables
-pthread_mutex_t pmutex;
 
+pthread_mutex_t pmutex;	//mutex lock
 int  a[100];
 int  b[100];
-int  c[100];
-int num_of_threads = 4;
-int n = sizeof(a)/sizeof(a[0]);
+int  c[100];	//array to store the sums of a and b arrays
+int num_of_threads = 4;	//number of threads
+int n = sizeof(a)/sizeof(a[0]);	//size of arrays
 
-void *mySum(void* threadid) ;
-void *minVal(void* threadid);
+void *mySum(void* threadid) ; //function to add our arrays
+void *minVal(void* threadid); //function to find the min value in c array (Prefix Sum logic)
 
 int main(){
-	pthread_t thread[num_of_threads];
-	pthread_mutex_init(&pmutex,NULL);
+	pthread_t thread[num_of_threads]; //thread pool
+	pthread_mutex_init(&pmutex,NULL);	//initializing lock
 
-	for(int j = 0; j<n;j++){
+	for(int j = 0; j<n;j++){	
 		a[j] = rand() %100;
 		b[j] = rand() %100;
 	}
 
 	long i;
-	for(i =	0; i< num_of_threads; i++){
+	for(i =	0; i< num_of_threads; i++){	//Fork
 		pthread_create(&thread[i], NULL, mySum, (void*) i );
 		sleep(1);
 	}
-
-	for(i =	0; i< num_of_threads; i++)
+	for(i =	0; i< num_of_threads; i++)	//Join
 		pthread_join(thread[i], NULL);
 
-	for(i =	0; i< num_of_threads; i++)
+	for(i =	0; i< num_of_threads; i++)	//Fork
 		pthread_create(&thread[i], NULL, minVal, (void*) i );
 	
-	for(i =	0; i< num_of_threads; i++)
+	for(i =	0; i< num_of_threads; i++)	//Join
 		pthread_join(thread[i], NULL);
 
-	printf("the min value is: %d\n", c[n-1]);
+	printf("the min value is: %d\n", c[n-1]); //print the min value in the array
 	return 0;
 }
 
-void *mySum(void* threadid){
+void *mySum(void* threadid){		//function to add our arrays
 	printf("Hello from thread: %ld\n", (long) threadid);
-	int size = n/num_of_threads;
+	int size = n/num_of_threads;	//number of items that each thread will compute
 	int idx;
-	long thread_id = (long)threadid;
-	for(long i = 0; i < size; i++){
+	long thread_id = (long)threadid; 	//cast threadid variable
+	for(long i = 0; i < size; i++){	
 		idx = thread_id*size+i;
 		c[idx] = a[idx] + b[idx];
 		printf("%d , ", c[idx] );
@@ -56,19 +57,19 @@ void *mySum(void* threadid){
 	return NULL;
 }
 
-void *minVal(void* threadid){
-	int size = n/num_of_threads;
+void *minVal(void* threadid){		//function to find the min value in c array
+	int size = n/num_of_threads;	//number of items that each thread will compute
 	int idx;
-	long thread_id = (long)threadid;
+	long thread_id = (long)threadid; //cast threadid variable
 	for(long i = 0; i<size; i++){
 		idx = thread_id*size+i;
-		if(i == size-1){
-			pthread_mutex_lock(&pmutex);
+		if(i == size-1){	// last iteration 
+			pthread_mutex_lock(&pmutex);	//Thread locks the value to compare (One thread at a time)
 			if (c[idx] < c[n-1])
-				c[n-1] = c[idx];
-			pthread_mutex_unlock(&pmutex);
+				c[n-1] = c[idx];	//c[n-1] will hold the min value in the array
+			pthread_mutex_unlock(&pmutex);	//Thread releases the lock
 		}
-		else if(c[idx] < c[thread_id*size+(size-1)]){
+		else if(c[idx] < c[thread_id*size+(size-1)]){ 	//c[thread_id*size+(size-1)] holds each thread's min value
 			c[thread_id*size+(size-1)] = c[idx];
 		}
 	}
