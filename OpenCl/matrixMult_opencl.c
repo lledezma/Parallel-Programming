@@ -146,10 +146,10 @@ int main(int argc, const char * argv[]) {
     }
     
     //assigning global and local work items
-    globalWorkSize[0] = num; 
-    globalWorkSize[1] = num;
-    localWorkSize[0] = 8;  
-    localWorkSize[1] = 8;
+    globalWorkSize[0] = num;	//global columns 
+    globalWorkSize[1] = num;	//global rows
+    localWorkSize[0] = 8;	//local columns  
+    localWorkSize[1] = 8;	//local rows
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
