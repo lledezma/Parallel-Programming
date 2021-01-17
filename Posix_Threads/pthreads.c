@@ -28,7 +28,7 @@ int main(){
 	long i;
 	for(i =	0; i< num_of_threads; i++){	//Fork
 		pthread_create(&thread[i], NULL, mySum, (void*) i );
-		sleep(1);
+		sleep(1);	//pause for 1 sec
 	}
 	for(i =	0; i< num_of_threads; i++)	//Join
 		pthread_join(thread[i], NULL);
