@@ -13,10 +13,9 @@ __kernel void match(__global char *pattern,
        for(i = 0; i < pSize; i++) {         
             //if a letter mismatch is found, break from the loop                                      
            if (pattern[i] != str[idx+i])         
-             break;               
+             return;               
        }
        //if i == size, that means a match has been found.                                                    
-       if(i == pSize)
-	atomic_add(results,1); //add one to results                    
+	     atomic_add(results,1); //add one to results                    
     }                                                             
 }                                                               

@@ -113,7 +113,7 @@ int main(int argc, const char * argv[]) {
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
     if(err != CL_SUCCESS){
-        printf("Error executing the Kernel...%d\n", err);
+        printf("Error executing the Kernel\n");
         return EXIT_FAILURE;
     }
 
