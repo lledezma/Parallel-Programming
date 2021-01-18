@@ -5,8 +5,7 @@ __kernel void match(__global char *pattern,
                        int sSize )                
 {                                                            
     //Get our global thread ID                               
-    int idx = get_global_id(0);                                 
-                                                       
+    int idx = get_global_id(0);                                                       
    //Check bounds                                            
    if(idx <= sSize-pSize){                                                  
        for(int i = 0; i < pSize; i++) {                                      
