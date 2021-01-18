@@ -8,9 +8,8 @@ __kernel void match(__global char *pattern,
     int idx = get_global_id(0);                                 
                                                        
    //Check bounds                                            
-   if(idx <= sSize-pSize){          
-       int i;                                                  
-       for(i = 0; i < pSize; i++) {         
+   if(idx <= sSize-pSize){                                                  
+       for(int i = 0; i < pSize; i++) {         
             //if a letter mismatch is found, exit.                                      
            if (pattern[i] != str[idx+i])         
              return;               
