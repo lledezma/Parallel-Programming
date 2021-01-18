@@ -9,12 +9,10 @@ __kernel void match(__global char *pattern,
                                                        
    //Check bounds                                            
    if(idx <= sSize-pSize){                                                  
-       for(int i = 0; i < pSize; i++) {         
-            //if a letter mismatch is found, exit.                                      
-           if (pattern[i] != str[idx+i])         
+       for(int i = 0; i < pSize; i++) {                                      
+           if (pattern[i] != str[idx+i]) //if a mismatch is found, exit.        
              return;               
-       }
-       //if i == size, that means a match has been found.                                                    
-	     atomic_add(results,1); //add one to results                    
+       }                                     
+	     atomic_add(results,1); //a match has been found, so we add 1 to results.                   
     }                                                             
 }                                                               
