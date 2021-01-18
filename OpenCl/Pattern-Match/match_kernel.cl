@@ -11,7 +11,7 @@ __kernel void match(__global char *pattern,
    if(idx <= sSize-pSize){          
        int i;                                                  
        for(i = 0; i < pSize; i++) {         
-            //if a letter mismatch is found, break from the loop                                      
+            //if a letter mismatch is found, exit.                                      
            if (pattern[i] != str[idx+i])         
              return;               
        }
