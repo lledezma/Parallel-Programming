@@ -21,7 +21,7 @@ int main() {
   cudaMalloc((void**)&d_b, Num*sizeof(int));
   cudaMalloc((void**)&d_c, Num*sizeof(int));
 
-  //filling host array variables
+  //initializing host array variables
    for(int i = 1; i <= Num; ++i){
       h_a[i-1] = i;
       h_b[i-1] = i;

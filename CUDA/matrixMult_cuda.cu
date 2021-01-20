@@ -36,7 +36,7 @@ int main(){
 	cudaMalloc((void**)&d_B, (colB*rowB)*sizeof(int));
 	cudaMalloc((void**)&d_C, (colB*rowA)*sizeof(int));
 
-	//filling host matrices
+	//initializing host matrices
 	for(int i = 0; i < (colA*rowA); i++){
 		h_A[i] = i+1;
 	}
