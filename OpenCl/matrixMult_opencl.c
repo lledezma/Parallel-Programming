@@ -63,7 +63,7 @@ int main(int argc, const char * argv[]) {
     h_b = (int*)malloc((colB*rowB)*sizeof(int));
     h_c = (int*)malloc((colB*rowA)*sizeof(int));
     
-    //filling host variables (Matrices)
+    //initializing host variables (Matrices)
     for(int i = 0; i < (colA*rowA); i++){
         h_a[i] = i+1;
     }
