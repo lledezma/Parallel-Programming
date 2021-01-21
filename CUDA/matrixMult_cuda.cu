@@ -26,7 +26,7 @@ int main(){
 	int rowB = colA;
 	int colB = 10;
 
-	//Declaring host variable
+	//Declaring host variables
 	int h_A[colA*rowA], h_B[colB*rowB], h_C[colB*rowA];
 	//Declaring device variables
 	int *d_A,*d_B,*d_C;
@@ -60,7 +60,7 @@ int main(){
 	//copy device results to host 
 	cudaMemcpy(h_C,d_C, (colB*rowA)*sizeof(int), cudaMemcpyDeviceToHost);
 
-	//print our results
+	//print the results
 	for(int i = 0; i < (rowA*colB); i++){
 	  printf("%d ", h_C[i]);
 	  if(((i+1) % colB) == 0)
