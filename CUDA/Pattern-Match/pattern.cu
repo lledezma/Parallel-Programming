@@ -52,6 +52,6 @@ int main(){
   cudaFree(d_pattern);
   cudaFree(d_string);
   cudaFree(d_results);
-  
-	return 0;
+
+  return 0;
 }
