@@ -12,8 +12,8 @@ __global__ void add(char* pattern, char* string, int* results, int patLength, in
     for(int i = 0; i < patLength; i++){                                               
       if (pattern[i] != string[x+i])   //if a mismatch is found, exit.        
         return;                                    
-    }                                                      
-		atomicAdd(results,1); //match has been found so we add 1 to results
+    }
+    atomicAdd(results,1); //match has been found so we add 1 to results
   }       
 }
 
