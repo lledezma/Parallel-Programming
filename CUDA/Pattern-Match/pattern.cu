@@ -8,7 +8,7 @@ __global__ void match(char* pattern, char* string, int* results, int patLength, 
   int idx = blockDim.x * blockIdx.x + threadIdx.x;
 
   //check bounds
-  if (x <= strLength-patLength){                                                         
+  if (idx <= strLength-patLength){                                                         
     for(int i = 0; i < patLength; i++){                                               
       if (pattern[i] != string[idx+i])   //if a mismatch is found, exit.        
         return;                                    
