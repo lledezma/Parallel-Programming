@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 
-__global__ void add(char* pattern, char* string, int* results, int patLength, int strLength){
+__global__ void match(char* pattern, char* string, int* results, int patLength, int strLength){
 	//get global thread id
   int x = blockDim.x * blockIdx.x + threadIdx.x;
 
@@ -40,7 +40,7 @@ int main(){
   cudaMemcpy(d_string,h_string, h_strLength*sizeof(char), cudaMemcpyHostToDevice);
 
   //Launch Kernel
-  add<<<1,h_strLength>>>(d_pattern,d_string,d_results,h_patLength, h_strLength);      //A grid with one block and strLength threads.
+  match<<<1,h_strLength>>>(d_pattern,d_string,d_results,h_patLength, h_strLength);      //A grid with one block and strLength threads.
 
   //copy device results to host results
   cudaMemcpy(&h_results, d_results, sizeof(int), cudaMemcpyDeviceToHost);
