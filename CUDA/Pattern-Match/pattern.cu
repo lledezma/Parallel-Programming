@@ -5,12 +5,12 @@
 
 __global__ void match(char* pattern, char* string, int* results, int patLength, int strLength){
 	//get global thread id
-  int x = blockDim.x * blockIdx.x + threadIdx.x;
+  int idx = blockDim.x * blockIdx.x + threadIdx.x;
 
   //check bounds
   if (x <= strLength-patLength){                                                         
     for(int i = 0; i < patLength; i++){                                               
-      if (pattern[i] != string[x+i])   //if a mismatch is found, exit.        
+      if (pattern[i] != string[idx+i])   //if a mismatch is found, exit.        
         return;                                    
     }
     atomicAdd(results,1); //match has been found so we add 1 to results
