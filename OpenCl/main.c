@@ -132,8 +132,8 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = maxCpuUnits();             //number of global work items
-    localWorkSize = globalWorkSize/2;           //number of work items per group
+    globalWorkSize = maxCpuUnits();      //number of global work items
+    localWorkSize = 2;          	 //number of work items per group
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
