@@ -107,8 +107,11 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = 100;           //number of global work items
-    localWorkSize = 50;           //number of work items per group
+    if(h_sSize%2 == 0)				//number of global work items
+    	globalWorkSize = h_sSize;
+    else
+	globalWorkSize = h_sSize+1;
+    localWorkSize = globalWorkSize/2;           //number of work items per group
 
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
