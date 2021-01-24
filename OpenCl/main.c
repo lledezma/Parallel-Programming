@@ -19,7 +19,7 @@ const char *KernelSource =                                     "\n" \
 "    while(idx < n){                                            \n" \
 "       c[idx] = a[idx] + b[idx];                               \n" \
 "       //increment thread index                                \n" \
-"       idx+= get_num_groups(0) * get_local_size(0);            \n" \
+"       idx += get_num_groups(0) * get_local_size(0);           \n" \
 "    }                                                          \n" \
 "}                                                              \n" ;
 
@@ -178,7 +178,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-int maxCpuUnits(){
+int maxCpuUnits(){      //Get the max number of compute units
     int err;
     cl_device_id device_id;
     cl_uint maxComputeUnits;

@@ -110,7 +110,7 @@ int main(int argc, const char * argv[]) {
     if(h_sSize%2 == 0)				//number of global work items
     	globalWorkSize = h_sSize;
     else
-	globalWorkSize = h_sSize+1;
+	   globalWorkSize = h_sSize+1;
     localWorkSize = globalWorkSize/2;           //number of work items per group
 
     //Execute the kernel
