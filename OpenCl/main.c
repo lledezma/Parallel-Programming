@@ -5,21 +5,25 @@
 #include <OpenCL/opencl.h>
 #include <stdio.h>
 
-const char *KernelSource =                                       "\n" \
-"__kernel void addArray(  __global int *a,                       \n" \
-"                       __global int *b,                         \n" \
-"                       __global int *c,                         \n" \
-"                       const unsigned int n)                    \n" \
-"{                                                               \n" \
-"    //Get our global thread ID                                  \n" \
-"    int idx = get_global_id(0);                                 \n" \
-"                                                                \n" \
-"    //Check bounds                                              \n" \
-"    if (idx < n)                                                \n" \
-"        c[idx] = a[idx] + b[idx];                               \n" \
-"}                                                               \n" ;
+// The kernel
+const char *KernelSource =                                     "\n" \
+"__kernel void addArray(  __global int *a,                      \n" \
+"                       __global int *b,                        \n" \
+"                       __global int *c,                        \n" \
+"                       const unsigned int n)                   \n" \
+"{                                                              \n" \
+"   //Get our global thread ID                                  \n" \
+"   int idx = get_global_id(0);                                 \n" \
+"                                                               \n" \
+"   //Check bounds                                              \n" \
+"    while(idx < n){                                            \n" \
+"       c[idx] = a[idx] + b[idx];                               \n" \
+"       //increment thread index                                \n" \
+"       idx+= get_num_groups(0) * get_local_size(0);            \n" \
+"    }                                                          \n" \
+"}                                                              \n" ;
 
-int cpuUnits(); //get the max compute units available
+int maxCpuUnits(); //get the max compute units available
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -32,7 +36,7 @@ int main(int argc, const char * argv[]) {
     size_t globalWorkSize;  //global work items
     size_t localWorkSize;   //work items per group
 
-    const int num = 12;     //size of arrays
+    const int num = 100;     //size of arrays
     
     //declaring device variables
     cl_mem d_a;
@@ -44,12 +48,13 @@ int main(int argc, const char * argv[]) {
     int* h_b;
     int* h_c;
     
-    //initializing host memory
+    //allocating host memory
     int bytes = num*sizeof(int);
     h_a = (int*)malloc(bytes);
     h_b = (int*)malloc(bytes);
     h_c = (int*)malloc(bytes);
     
+    //initializing host variables 
     for(int i = 0; i < num; i++){
         h_a[i] = i+1;
         h_b[i] = i+1;
@@ -127,9 +132,8 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = cpuUnits(); //number of global work items
-    localWorkSize = 2;           //number of work items per group
-                                 //cpuUnits()/2 = # of work groups
+    globalWorkSize = maxCpuUnits();             //number of global work items
+    localWorkSize = globalWorkSize/2;           //number of work items per group
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
@@ -152,7 +156,7 @@ int main(int argc, const char * argv[]) {
     size_t valueSize;
     char* deviceName = (char*)malloc(sizeof(valueSize));
     clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, deviceName, NULL);
-    printf("Running on device: %s with %d compute units.\n", deviceName, cpuUnits());
+    printf("Running on device: %s with %d compute units.\n", deviceName, maxCpuUnits());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
@@ -174,7 +178,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-int cpuUnits(){
+int maxCpuUnits(){
     int err;
     cl_device_id device_id;
     cl_uint maxComputeUnits;
