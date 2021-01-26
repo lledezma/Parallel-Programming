@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 long LoadOpenFile(char const* path, char **buf); //Function to Open Files
+int MaxCompUnits(); //get the max compute units available
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -26,7 +27,7 @@ int main(int argc, const char * argv[]) {
     //host variables
     int h_results;          //host variable to store results
     char* h_pattern = "NNTHVLTLP";      
-    char* h_string = "MIVNNTHVLTLPLYTTTTCHTHPHLYTNNTHVLTLPYSIYHLKLTLLSDSTSLHGPSCHTHNNTHVLTLPTHVLTLLTLLSDSTSRWGSK";
+    char* h_string = "MIVNNTHVLTLPLYTTTTCHTHPHLYTNNTHVLTLPYSIYHLKLTLLNNTHVLTLPSDSTSLHGPSCHTHNNTHVLTLPTHVLTLLTLLSDSTSRWGSKNNTHVLTLP";
     int h_pSize = (int)strlen(h_pattern);       //length of pattern
     int h_sSize = (int)strlen(h_string);        //length of sequence
 
@@ -107,11 +108,8 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    if(h_sSize%2 == 0)				//number of global work items
-    	globalWorkSize = h_sSize;
-    else
-	   globalWorkSize = h_sSize+1;
-    localWorkSize = globalWorkSize/2;           //number of work items per group
+    globalWorkSize = MaxCompUnits();   //number of global work items
+    localWorkSize = globalWorkSize/4;  //number of work items per group
 
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
@@ -179,6 +177,20 @@ long LoadOpenFile(char const* path, char **buf){
     }
     (*buf)[fsz] = '\0';
     return (long)fsz;
+}
+
+int MaxCompUnits(){
+    int err;
+    cl_device_id device_id;
+    cl_uint maxComputeUnits;
+    err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
+    if(err != CL_SUCCESS)
+        return EXIT_FAILURE;
+    
+    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
+    if(err != CL_SUCCESS)
+        return EXIT_FAILURE;
+    return maxComputeUnits;
 }
 
 
