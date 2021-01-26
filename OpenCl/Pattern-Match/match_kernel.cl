@@ -12,8 +12,7 @@ __kernel void match(__global char *pattern,
       if(pattern[i] != str[idx+i])                  //if a mismatch is found, exit the loop. 
         break;
     }
-    if(i == patLength)                              //match has been found so we add 1 to localCount
-      localCount+=1;
+    localCount += (i == patLength) ? 1 : 0;         //if i == patLength, add 1 to localCount
     idx += get_num_groups(0) * get_local_size(0);    //increment our thread index
   }
   atomic_add(results,localCount);     //add the localCount to results (global count)
