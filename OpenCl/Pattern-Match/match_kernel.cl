@@ -4,8 +4,8 @@ __kernel void match(__global char *pattern,
                        int patLength,                 
                        int strLength)                
 {                                                            
-  int localCount = 0;                               //local match count
-  int idx = get_global_id(0);                       //Get our global thread ID  
+  int idx = get_global_id(0);                       //Get our global thread ID 
+  int localCount = 0;                               //local match count 
   int i;
   while(idx <= strLength-patLength){                //Check bounds
     for(i = 0; i < patLength; i++){
