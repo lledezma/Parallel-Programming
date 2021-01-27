@@ -5,6 +5,8 @@
 #include <OpenCL/opencl.h>
 #include <stdio.h>
 
+#define USE_CPU
+
 // The kernel
 const char *KernelSource =                                     "\n" \
 "__kernel void addArray(  __global int *a,                      \n" \
@@ -180,7 +182,11 @@ int maxCpuUnits(){
     int err;
     cl_device_id device_id;
     cl_uint maxComputeUnits;
-    err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #ifdef USE_CPU
+        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #else
+        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
+    #endif
     if(err != CL_SUCCESS){
         printf("Error getting device id from maxCpuUnits function\n");
         return EXIT_FAILURE;
@@ -197,7 +203,11 @@ int maxCpuUnits(){
 const char* deviceName(){
     int err;
     cl_device_id device_id;
-    err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #ifdef USE_CPU
+        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #else
+        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
+    #endif
     if(err != CL_SUCCESS){
         printf("Error getting device id from deviceName function\n");
         exit(EXIT_FAILURE);
