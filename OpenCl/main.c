@@ -70,7 +70,11 @@ int main(int argc, const char * argv[]) {
     }
     
     //get device ID
-    err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #ifdef USE_CPU
+        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    #else
+        err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
+    #endif
     if(err != CL_SUCCESS){
         printf("Error getting the device IDs\n");
         return EXIT_FAILURE;
