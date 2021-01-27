@@ -25,7 +25,7 @@ const char *KernelSource =                                     "\n" \
 "    }                                                          \n" \
 "}                                                              \n" ;
 
-int maxCpuUnits(); //get the max compute units available
+int maxCompUnits(); //get the max compute units available
 const char* deviceName(); //get the name of device
 
 int main(int argc, const char * argv[]) {
@@ -135,7 +135,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = maxCpuUnits();      //number of global work items
+    globalWorkSize = maxCompUnits();      //number of global work items
     localWorkSize = 2;          	 //number of work items per group
     
     //Execute the kernel
@@ -156,7 +156,7 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print device info, compute units, and results
-    printf("Running on device: %s with %d compute units.\n", deviceName(), maxCpuUnits());
+    printf("Running on device: %s with %d compute units.\n", deviceName(), maxCompUnits());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
@@ -178,7 +178,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-int maxCpuUnits(){   
+int maxCompUnits(){
     int err;
     cl_device_id device_id;
     cl_uint maxComputeUnits;
@@ -188,13 +188,13 @@ int maxCpuUnits(){
         err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
     #endif
     if(err != CL_SUCCESS){
-        printf("Error getting device id from maxCpuUnits function\n");
+        printf("Error getting device id from maxCompUnits function\n");
         return EXIT_FAILURE;
     }
     
     err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
     if(err != CL_SUCCESS){
-        printf("Error getting device info from maxCpuUnits function\n");
+        printf("Error getting device info from maxCompUnits function\n");
         return EXIT_FAILURE;
     }
     return maxComputeUnits;
