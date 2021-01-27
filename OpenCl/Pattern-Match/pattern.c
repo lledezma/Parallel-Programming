@@ -7,6 +7,7 @@
 
 long LoadOpenFile(char const* path, char **buf); //Function to Open Files
 int MaxCompUnits(); //get the max compute units available
+const char* deviceName(); //get the name of device
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -184,13 +185,35 @@ int MaxCompUnits(){
     cl_device_id device_id;
     cl_uint maxComputeUnits;
     err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
-    if(err != CL_SUCCESS)
+    if(err != CL_SUCCESS){
+        printf("Error getting device id from maxCompUnits function\n");
         return EXIT_FAILURE;
+    }
     
     err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
-    if(err != CL_SUCCESS)
+    if(err != CL_SUCCESS){
+        printf("Error getting device info from maxCompUnits function\n");
         return EXIT_FAILURE;
+    }
     return maxComputeUnits;
 }
 
+const char* deviceName(){
+    int err;
+    cl_device_id device_id;
+    err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
+    if(err != CL_SUCCESS){
+        printf("Error getting device id from deviceName function\n");
+        exit(EXIT_FAILURE);
+    }
+
+    size_t valueSize;
+    char* nameOfDevice = (char*)malloc(sizeof(valueSize));
+    err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, nameOfDevice, NULL);
+    if(err != CL_SUCCESS){
+        printf("Error getting device name from deviceName function\n");
+        exit(EXIT_FAILURE);
+    }
+    return nameOfDevice;
+}
 
