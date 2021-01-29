@@ -92,7 +92,6 @@ int main(int argc, const char * argv[]) {
 
         for(cl_uint j = 0; j < num_devices; j++)
         {
-            // printf("%d\n", j);
             //create command queue
             queue = clCreateCommandQueue(context, device_id[j], CL_QUEUE_PROFILING_ENABLE, &err);
             if(err != CL_SUCCESS){
