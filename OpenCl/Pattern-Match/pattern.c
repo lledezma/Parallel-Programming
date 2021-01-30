@@ -207,9 +207,8 @@ const char* deviceName(){
         exit(EXIT_FAILURE);
     }
 
-    size_t valueSize;
-    char* nameOfDevice = (char*)malloc(sizeof(valueSize));
-    err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, nameOfDevice, NULL);
+    char* nameOfDevice = (char*)malloc(sizeof(char)*128);
+    err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, sizeof(char)*128, nameOfDevice, NULL);
     if(err != CL_SUCCESS){
         printf("Error getting device name from deviceName function\n");
         exit(EXIT_FAILURE);
