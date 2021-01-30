@@ -71,11 +71,15 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    cl_uint num_devices; //devices
+    cl_uint maxComputeUnits; //max compute units
+    char nameOfDevice[128]; //name of device
+
     for(cl_uint h = 0; h < num_platforms; h++)
     {
 
-        cl_uint num_devices; // to hold the number of devices found
-        err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices); //get number of devices found
+        //get number of devices found
+        err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices); 
 
         device_id = calloc(sizeof(cl_device_id), num_devices); //allocate memory for device IDs
         clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); //get ids of all devices available
@@ -90,7 +94,6 @@ int main(int argc, const char * argv[]) {
         for(cl_uint j = 0; j < num_devices; j++)
         {
             //get the max compute units
-            cl_uint maxComputeUnits;
             err = clGetDeviceInfo(device_id[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
             if(err != CL_SUCCESS){
                 printf("Error getting the max compute units\n");
@@ -98,7 +101,6 @@ int main(int argc, const char * argv[]) {
             }
 
             //get the name of the device
-            char nameOfDevice[128];
             err = clGetDeviceInfo(device_id[j], CL_DEVICE_NAME, 128, nameOfDevice, NULL);
             if(err != CL_SUCCESS){
                 printf("Error getting device name of the device\n");
