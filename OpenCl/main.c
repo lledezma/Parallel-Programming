@@ -200,7 +200,7 @@ int main(int argc, const char * argv[]) {
 
 int maxCpuUnits(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID){
     int err;
-    cl_platform_id* platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms); //allocate memory for platform IDs
+    cl_platform_id* platform = calloc(sizeof(cl_platform_id), num_platforms); //allocate memory for platform IDs
     err = clGetPlatformIDs(num_platforms, platform, NULL); //get the IDs of available platforms
     if(err != CL_SUCCESS){
         printf("Error getting the platforms\n");
@@ -225,7 +225,7 @@ int maxCpuUnits(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, 
 
 const char* deviceName(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID){
     int err;
-    cl_platform_id* platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms); //allocate memory for platform IDs
+    cl_platform_id* platform = calloc(sizeof(cl_platform_id), num_platforms); //allocate memory for platform IDs
     err = clGetPlatformIDs(num_platforms, platform, NULL); //get the IDs of available platforms
     if(err != CL_SUCCESS){
         printf("Error getting the platforms\n");
