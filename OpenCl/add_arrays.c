@@ -26,7 +26,6 @@ const char *KernelSource =                                     "\n" \
 "}                                                              \n" ;
 
 int maxCompUnits(); //get the max compute units available
-const char* deviceName(); //get the name of device
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -79,7 +78,15 @@ int main(int argc, const char * argv[]) {
         printf("Error getting the device IDs\n");
         return EXIT_FAILURE;
     }
-    
+
+    //get the name of the device
+    char nameOfDevice[128];
+    err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, 128, nameOfDevice, NULL);
+    if(err != CL_SUCCESS){
+        printf("Error getting the name of the device\n");
+        return EXIT_FAILURE;
+    }
+
     //create context
     context = clCreateContext(0, 1, &device_id, NULL, NULL, &err);
     if(err != CL_SUCCESS){
@@ -160,7 +167,7 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print device info, compute units, and results
-    printf("Running on device: %s with %d compute units.\n", deviceName(), maxCompUnits());
+    printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxCompUnits());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
@@ -202,28 +209,5 @@ int maxCompUnits(){
         return EXIT_FAILURE;
     }
     return maxComputeUnits;
-}
-
-const char* deviceName(){
-    int err;
-    cl_device_id device_id;
-    #ifdef USE_CPU
-        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
-    #else
-        err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
-    #endif
-    if(err != CL_SUCCESS){
-        printf("Error getting device id from deviceName function\n");
-        exit(EXIT_FAILURE);
-    }
-
-    size_t valueSize;
-    char* nameOfDevice = (char*)malloc(sizeof(valueSize));
-    err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, valueSize, nameOfDevice, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device name from deviceName function\n");
-        exit(EXIT_FAILURE);
-    }
-    return nameOfDevice;
 }
 
