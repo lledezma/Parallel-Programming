@@ -23,9 +23,6 @@ const char *KernelSource =                                     "\n" \
 "    }                                                          \n" \
 "}                                                              \n" ;
 
-int maxCpuUnits(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID); //get the max compute units available
-const char* deviceName(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID); //get the name of device
-
 int main(int argc, const char * argv[]) {
     int err; //varible to track errors
     cl_platform_id* platform;
@@ -92,6 +89,22 @@ int main(int argc, const char * argv[]) {
 
         for(cl_uint j = 0; j < num_devices; j++)
         {
+            //get the max compute units
+            cl_uint maxComputeUnits;
+            err = clGetDeviceInfo(device_id[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
+            if(err != CL_SUCCESS){
+                printf("Error getting the max compute units\n");
+                return EXIT_FAILURE;
+            }
+
+            //get the name of the device
+            char nameOfDevice[128];
+            err = clGetDeviceInfo(device_id[j], CL_DEVICE_NAME, 128, nameOfDevice, NULL);
+            if(err != CL_SUCCESS){
+                printf("Error getting device name of the device\n");
+                return EXIT_FAILURE;
+            }
+
             //create command queue
             queue = clCreateCommandQueue(context, device_id[j], CL_QUEUE_PROFILING_ENABLE, &err);
             if(err != CL_SUCCESS){
@@ -145,7 +158,7 @@ int main(int argc, const char * argv[]) {
                 return EXIT_FAILURE;
             }
             
-            globalWorkSize = maxCpuUnits(num_platforms, h, num_devices, j);   //number of global work items
+            globalWorkSize = maxComputeUnits;   //number of global work items
             localWorkSize = 2;                //number of work items per group
             
             //Execute the kernel
@@ -167,7 +180,7 @@ int main(int argc, const char * argv[]) {
             }
             
         ///*   print device info, compute units, and results
-            printf("Running on device: %s with %d compute units.\n", deviceName(num_platforms, h, num_devices, j), maxCpuUnits(num_platforms, h, num_devices, j));
+            printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxComputeUnits);
             // for(int i = 0; i < num; i++){
             //     printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
             // }
@@ -176,7 +189,7 @@ int main(int argc, const char * argv[]) {
             clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(time_start), &time_start, NULL);
             clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(time_end), &time_end, NULL);
             double nanoSeconds = time_end-time_start;
-            printf("OpenCl Execution time is: %0.3f milliseconds \n",nanoSeconds / 1000000.0);
+            printf("OpenCl Execution time is: %0.3f milliseconds \n\n",nanoSeconds / 1000000.0);
         //*/
         }
     }
@@ -197,55 +210,3 @@ int main(int argc, const char * argv[]) {
     
     return 0;
 }
-
-int maxCpuUnits(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID){
-    int err;
-    cl_platform_id* platform = calloc(sizeof(cl_platform_id), num_platforms); //allocate memory for platform IDs
-    err = clGetPlatformIDs(num_platforms, platform, NULL); //get the IDs of available platforms
-    if(err != CL_SUCCESS){
-        printf("Error getting the platforms\n");
-        return EXIT_FAILURE;
-    }
-
-    cl_device_id* devices = calloc(sizeof(cl_device_id), num_devices);
-    cl_uint maxComputeUnits;
-    err = clGetDeviceIDs(platform[platformID], CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device id from maxCpuUnits function\n");
-        return EXIT_FAILURE;
-    }
-    
-    err = clGetDeviceInfo(devices[deviceID], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device info from maxCpuUnits function\n");
-        return EXIT_FAILURE;
-    }
-    return maxComputeUnits;
-}
-
-const char* deviceName(cl_uint num_platforms, cl_uint platformID, cl_uint num_devices, cl_uint deviceID){
-    int err;
-    cl_platform_id* platform = calloc(sizeof(cl_platform_id), num_platforms); //allocate memory for platform IDs
-    err = clGetPlatformIDs(num_platforms, platform, NULL); //get the IDs of available platforms
-    if(err != CL_SUCCESS){
-        printf("Error getting the platforms\n");
-        exit(EXIT_FAILURE);
-    }
-
-    cl_device_id* devices = calloc(sizeof(cl_device_id), num_devices);
-    err = clGetDeviceIDs(platform[platformID], CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device id from deviceName function\n");
-        exit(EXIT_FAILURE);
-    }
-
-    size_t valueSize;
-    char* nameOfDevice = (char*)malloc(sizeof(valueSize));
-    err = clGetDeviceInfo(devices[deviceID], CL_DEVICE_NAME, valueSize, nameOfDevice, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device name from deviceName function\n");
-        exit(EXIT_FAILURE);
-    }
-    return nameOfDevice;
-}
-
