@@ -77,12 +77,20 @@ int main(int argc, const char * argv[]) {
 
     for(cl_uint h = 0; h < num_platforms; h++)
     {
-
         //get number of devices found
         err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices); 
+        if(err != CL_SUCCESS){
+            printf("Error getting the number of devices found.\n");
+            return EXIT_FAILURE;
+        }
 
         device_id = calloc(sizeof(cl_device_id), num_devices); //allocate memory for device IDs
-        clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); //get ids of all devices available
+        //get ids of all devices available
+        err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); 
+        if(err != CL_SUCCESS){
+            printf("Error getting IDs of devices.\n");
+            return EXIT_FAILURE;
+        }
 
         //create context
         context = clCreateContext(0, num_devices, device_id, NULL, NULL, &err);
