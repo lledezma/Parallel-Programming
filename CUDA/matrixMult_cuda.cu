@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 
-#define BLOCK_SIZE 16;
 
 __global__ void multiMatrix(int* A, int* B, int*C, int colA, int colB, int rowA){
 	int x = blockDim.x * blockIdx.x + threadIdx.x;
@@ -20,6 +19,7 @@ __global__ void multiMatrix(int* A, int* B, int*C, int colA, int colB, int rowA)
 }
 
 int main(){
+	int BLOCK_SIZE = 16;
 	//rows and columns 
 	int rowA = 15;
 	int colA = 15;
