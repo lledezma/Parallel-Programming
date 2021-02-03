@@ -37,10 +37,8 @@ int main(int argc, const char * argv[]) {
     cl_kernel kernel;
     
     //2d NDRange and workgroup
-    size_t globalWorkSize[2];  //NDRange 
-    size_t localWorkSize[2];   //workgroup
-
-    const int num = 16;     //global_size
+    size_t globalWorkSize[2] = {16, 16};  //NDRange (global work items)
+    size_t localWorkSize[2] = {8, 8};   //workgroup (local work items)
     
     //declaring device variables
     cl_mem d_a;
@@ -152,13 +150,7 @@ int main(int argc, const char * argv[]) {
         printf("Error setting the kernel arguments\n");
         return EXIT_FAILURE;
     }
-    
-    //assigning global and local work items
-    globalWorkSize[0] = num;	//global columns 
-    globalWorkSize[1] = num;	//global rows
-    localWorkSize[0] = 8;	//local columns  
-    localWorkSize[1] = 8;	//local rows
-    
+
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
     if(err != CL_SUCCESS){
