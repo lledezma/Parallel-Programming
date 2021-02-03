@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 const char *KernelSource =                                       "\n" \
-"__kernel void multiMatrix(  __global int *A,                    \n" \
+"__kernel void multiMatrix(__global int *A,                      \n" \
 "                         __global int *B,                       \n" \
 "                         __global int *C,                       \n" \
 "                         int colA, int colB, int rowA)          \n" \

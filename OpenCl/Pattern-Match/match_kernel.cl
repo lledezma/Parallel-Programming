@@ -1,8 +1,8 @@
 __kernel void match(__global char *pattern,                 
-                       __global char *str,                    
-                       __global int *results,                    
-                       int patLength,                 
-                       int strLength)                
+                    __global char *str,                    
+                    __global int *results,                    
+                             int patLength,                 
+                             int strLength)                
 {                                                            
   int idx = get_global_id(0);                       //Get our global thread ID 
   int localCount = 0;                               //local match count 

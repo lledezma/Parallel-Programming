@@ -7,7 +7,7 @@
 
 // The kernel
 const char *KernelSource =                                     "\n" \
-"__kernel void addArray(  __global int *a,                      \n" \
+"__kernel void addArray(__global int *a,                        \n" \
 "                       __global int *b,                        \n" \
 "                       __global int *c,                        \n" \
 "                       const unsigned int n)                   \n" \
