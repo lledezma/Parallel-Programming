@@ -46,11 +46,11 @@ int main(){
 void *mySum(void* threadid){		//function to add our arrays
 	printf("Hello from thread: %ld\n", (long) threadid);
 	int size = n/num_of_threads;	//number of items that each thread will compute
-	int idx;
+	int idx;	//index
 	long thread_id = (long)threadid; 	//cast threadid variable
 	for(long i = 0; i < size; i++){	
-		idx = thread_id*size+i;
-		c[idx] = a[idx] + b[idx];
+		idx = thread_id*size+i;		//increment index
+		c[idx] = a[idx] + b[idx];	//add two array values and store result
 		printf("%d , ", c[idx] );
 	}
 	printf("\n");
