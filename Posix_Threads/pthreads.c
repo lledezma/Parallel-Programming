@@ -59,10 +59,10 @@ void *mySum(void* threadid){		//function to add our arrays
 
 void *minVal(void* threadid){		//function to find the min value in c array
 	int size = n/num_of_threads;	//number of items that each thread will compute
-	int idx;
+	int idx;	//index
 	long thread_id = (long)threadid; //cast threadid variable
 	for(long i = 0; i<size; i++){
-		idx = thread_id*size+i;
+		idx = thread_id*size+i;	//increment index
 		if(i == size-1){	// last iteration 
 			pthread_mutex_lock(&pmutex);	//Thread locks the value to compare (One thread at a time)
 			if (c[idx] < c[n-1])
