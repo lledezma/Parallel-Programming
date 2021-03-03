@@ -17,9 +17,10 @@ void *mySum(void* threadid) ; //function to add our arrays
 void *minVal(void* threadid); //function to find the min value in c array (Prefix Sum logic)
 
 int main(){
-	pthread_t thread[num_of_threads]; //thread pool
+	pthread_t thread[num_of_threads]; 	//thread pool
 	pthread_mutex_init(&pmutex,NULL);	//initializing lock
 
+	//Initializing our a and b arrays
 	for(int j = 0; j<n;j++){	
 		a[j] = rand() %100;
 		b[j] = rand() %100;
@@ -45,13 +46,11 @@ int main(){
 
 void *mySum(void* threadid){		//function to add our arrays
 	printf("Hello from thread: %ld\n", (long) threadid);
-	int size = n/num_of_threads;	//number of items that each thread will compute
-	int idx;	//index
-	long thread_id = (long)threadid; 	//cast threadid variable
-	for(long i = 0; i < size; i++){	
-		idx = thread_id*size+i;		//increment index
-		c[idx] = a[idx] + b[idx];	//add two array values and store result
-		printf("%d , ", c[idx] );
+	long idx = (long)threadid; 	//cast threadid variable
+	while(idx < n){
+		c[idx] = a[idx] + b[idx]; 	//store sum
+		printf("%d, ", c[idx]);		
+		idx+=num_of_threads;		//increment thread index by adding total number of threads
 	}
 	printf("\n");
 	return NULL;
