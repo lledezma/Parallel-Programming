@@ -1,5 +1,5 @@
-		//Add two arrays and store the new values in a new array. Calculate the min value in
-		// the new generated array. Multithreading program
+			//Adding two arrays and finding the min value. Using prefix sum algorithm logic
+			//to find min value. Multithreading program using POSIX Threads
 #include <iostream>
 #include <thread>
 #include <mutex>
