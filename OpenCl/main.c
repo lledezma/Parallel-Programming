@@ -66,6 +66,7 @@ int main(int argc, const char * argv[]) {
         printf("Error getting the number of platforms\n");
         return EXIT_FAILURE;
     }
+
     //allocate memory for platform IDs
     platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms);
     //get the IDs of available platforms
