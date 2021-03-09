@@ -58,14 +58,18 @@ int main(int argc, const char * argv[]) {
         h_b[i] = i+1;
     }
     
-    cl_uint num_platforms; //number of platforms
-    err = clGetPlatformIDs(0, NULL, &num_platforms); //get the number of platforms found
+    //number of platforms
+    cl_uint num_platforms; 
+    //get the number of platforms found
+    err = clGetPlatformIDs(0, NULL, &num_platforms); 
     if(err != CL_SUCCESS){
         printf("Error getting the number of platforms\n");
         return EXIT_FAILURE;
     }
-    platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms); //allocate memory for platform IDs
-    err = clGetPlatformIDs(num_platforms, platform, NULL); //get the IDs of available platforms
+    //allocate memory for platform IDs
+    platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms);
+    //get the IDs of available platforms
+    err = clGetPlatformIDs(num_platforms, platform, NULL); 
     if(err != CL_SUCCESS){
         printf("Error getting the platforms\n");
         return EXIT_FAILURE;
@@ -84,7 +88,8 @@ int main(int argc, const char * argv[]) {
             return EXIT_FAILURE;
         }
 
-        device_id = calloc(sizeof(cl_device_id), num_devices); //allocate memory for device IDs
+        //allocate memory for device IDs
+        device_id = calloc(sizeof(cl_device_id), num_devices); 
         //get ids of all devices available
         err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); 
         if(err != CL_SUCCESS){
