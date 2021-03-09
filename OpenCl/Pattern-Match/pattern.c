@@ -1,4 +1,4 @@
-                //Pattern Match Program using OpenCL
+                //Pattern-Match Program using OpenCL
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
