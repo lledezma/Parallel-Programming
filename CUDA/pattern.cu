@@ -50,7 +50,7 @@ int main(){
 
   //free device memory
   cudaFree(d_pattern);
-  cudaFree(d_string);
+  cudaFree(d_sequence);
   cudaFree(d_results);
 
   return 0;

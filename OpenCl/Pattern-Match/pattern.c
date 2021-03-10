@@ -134,7 +134,7 @@ int main(int argc, const char * argv[]) {
 
     //release device memory
     clReleaseMemObject(d_pattern);
-    clReleaseMemObject(d_string);
+    clReleaseMemObject(d_sequence);
     clReleaseMemObject(d_results);
     clReleaseProgram(program);
     clReleaseKernel(kernel);
