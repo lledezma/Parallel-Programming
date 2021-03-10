@@ -22,15 +22,15 @@ int main(int argc, const char * argv[]) {
     
     //device variables
     cl_mem d_pattern;       //device pattern
-    cl_mem d_string;        //device sequence
+    cl_mem d_sequence;      //device sequence
     cl_mem d_results;       //device variable to store results
     
     //host variables
     int h_results;          //host variable to store results
     char* h_pattern = "GGATCGA";      
-    char* h_string = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
+    char* h_sequence = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
     int h_pSize = (int)strlen(h_pattern);       //length of pattern
-    int h_sSize = (int)strlen(h_string);        //length of sequence
+    int h_sSize = (int)strlen(h_sequence);      //length of sequence
 
     // # of platform IDs || platform || # of OpenCL platforms available
     err = clGetPlatformIDs(1, &platform, NULL);
@@ -91,7 +91,7 @@ int main(int argc, const char * argv[]) {
     
     //allocate device memory and copy host memory to device memory
     d_pattern = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, h_pSize, h_pattern, &err);
-    d_string = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, h_sSize, h_string, &err);
+    d_sequence = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, h_sSize, h_sequence, &err);
     d_results = clCreateBuffer(context, CL_MEM_READ_WRITE, 1, NULL, &err);
     if(err != CL_SUCCESS){
         printf("Error allocating device memory\n");
@@ -100,7 +100,7 @@ int main(int argc, const char * argv[]) {
 
     // Set the Kernel Arguments
     err = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void*)&d_pattern);
-    err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), (void*)&d_string);
+    err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), (void*)&d_sequence);
     err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&d_results);
     err |= clSetKernelArg(kernel, 3, sizeof(int), (void*)&h_pSize);
     err |= clSetKernelArg(kernel, 4, sizeof(int), (void*)&h_sSize);

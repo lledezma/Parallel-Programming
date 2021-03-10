@@ -1,15 +1,15 @@
 __kernel void match(__global char *pattern,                 
-                    __global char *str,                    
+                    __global char *sequence,                    
                     __global int *results,                    
                              int patLength,                 
-                             int strLength)                
+                             int seqLength)                
 {                                                            
   int idx = get_global_id(0);                       //Get our global thread ID 
   int localCount = 0;                               //local match count 
   int i;
-  while(idx <= strLength-patLength){                //Check bounds
+  while(idx <= seqLength-patLength){                //Check bounds
     for(i = 0; i < patLength; i++){
-      if(pattern[i] != str[idx+i])                  //if a mismatch is found, exit the loop. 
+      if(pattern[i] != sequence[idx+i])             //if a mismatch is found, exit the loop. 
         break;
     }
     localCount += (i == patLength) ? 1 : 0;         //if i == patLength, add 1 to localCount
