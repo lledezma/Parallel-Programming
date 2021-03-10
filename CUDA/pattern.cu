@@ -25,8 +25,8 @@ int main(){
 
   //host variables
   int h_results;        //host varible to store results  
-  const char* h_pattern = "NNTHVLTLP";
-  const char* h_string = "MIVNNTHVLTLPLYTTTTCHTHPHLYTNNTHVLTLPYSIYHLKLTLLSDSTSLHGPSCHTHNNTHVLTLPTHVLTLLTLLSDSTSRWGSK";
+  const char* h_pattern = "GGATCGA";
+  const char* h_string = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
   int h_patLength = (int)strlen(h_pattern); //length of pattern
   int h_strLength = (int)strlen(h_string);  //length of string
 

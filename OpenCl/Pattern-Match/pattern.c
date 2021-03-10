@@ -27,8 +27,8 @@ int main(int argc, const char * argv[]) {
     
     //host variables
     int h_results;          //host variable to store results
-    char* h_pattern = "NNTHVLTLP";      
-    char* h_string = "MIVNNTHVLTLPLYTTTTCHTHPHLYTNNTHVLTLPYSIYHLKLTLLNNTHVLTLPSDSTSLHGPSCHTHNNTHVLTLPTHVLTLLTLLSDSTSRWGSKNNTHVLTLP";
+    char* h_pattern = "GGATCGA";      
+    char* h_string = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
     int h_pSize = (int)strlen(h_pattern);       //length of pattern
     int h_sSize = (int)strlen(h_string);        //length of sequence
 
