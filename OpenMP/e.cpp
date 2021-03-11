@@ -1,6 +1,6 @@
 #include <iostream>
 #include <omp.h>
-#include < StopWatch.h>
+#include <StopWatch.h>
 #include <math.h>
 using namespace std;
                             //Computing the Mathematical Constant e=2.71828 using OpenMP
