@@ -5,25 +5,26 @@
 #include <OpenCL/opencl.h>
 #include <stdio.h>
 
-const char *KernelSource =                                       "\n" \
-"__kernel void multiMatrix(__global int *A,                      \n" \
-"                         __global int *B,                       \n" \
-"                         __global int *C,                       \n" \
-"                         int colA, int colB, int rowA)          \n" \
-"{                                                               \n" \
-"    //Get our global thread ID                                  \n" \
-"    int x = get_global_id(0);                                   \n" \
-"    int y = get_global_id(1);                                   \n" \
-"                                                                \n" \
-"    int sum = 0;                                                \n" \
-"    //Check bounds                                              \n" \
-"    if(x < colB && y < rowA){                                   \n" \
-"       for(int i = 0; i < colA; ++i){                           \n" \
-"           sum += A[y * colA + i] * B[i * colB + x];            \n" \
-"       }                                                        \n" \
-"        C[y * colB + x] = sum;                                  \n" \
-"     }                                                          \n" \
-"}                                                               \n" ;
+const char *KernelSource =                                    "\n"
+"#pragma OPENCL EXTENSION cl_khr_fp64 : enable                 \n"
+"kernel void multiMatrix(__global int *A,                      \n"
+"                        __global int *B,                      \n"
+"                        __global int *C,                      \n"
+"                        int colA, int colB, int rowA)         \n"
+"{                                                             \n"
+"    //Get our global thread ID                                \n"
+"    int x = get_global_id(0);                                 \n"
+"    int y = get_global_id(1);                                 \n"
+"                                                              \n"
+"    //Check bounds                                            \n"
+"    int sum = 0;                                              \n"
+"    if(x < colB && y < rowA){                                 \n"
+"       for(int i = 0; i < colA; ++i){                         \n"
+"           sum += A[y * colA + i] * B[i * colB + x];          \n"
+"       }                                                      \n"
+"        C[y * colB + x] = sum;                                \n"
+"     }                                                        \n"
+"}                                                             \n";
 
 int gpuUnits(); //get the max compute units available
 
@@ -110,7 +111,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     // built the program
-    err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+    err = clBuildProgram(program, 1, &device_id, NULL, NULL, NULL);
     if(err != CL_SUCCESS){
         printf("Error building the program\n");
         return EXIT_FAILURE;
