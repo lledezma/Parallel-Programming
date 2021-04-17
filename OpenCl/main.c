@@ -79,6 +79,8 @@ int main(int argc, const char * argv[]) {
     cl_uint num_devices; //devices
     cl_uint maxComputeUnits; //max compute units
     char nameOfDevice[128]; //name of device
+    cl_ulong time_start;    //event start time
+    cl_ulong time_end;      //event end time
 
     for(cl_uint h = 0; h < num_platforms; h++)
     {
@@ -200,8 +202,7 @@ int main(int argc, const char * argv[]) {
             // for(int i = 0; i < num; i++){
             //     printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
             // }
-            cl_ulong time_start;
-            cl_ulong time_end;
+
             clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(time_start), &time_start, NULL);
             clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(time_end), &time_end, NULL);
             double nanoSeconds = time_end-time_start;
