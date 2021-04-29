@@ -32,10 +32,10 @@ __kernel void match2(__global char *pattern,
     if(pattern[i] != sequence[idx+i] || i == patLength){
       if(i == patLength) 
         localCount +=1; //if i == patLength, add 1 to localCount
-      i = -1; //reset i variable 
+      i = -1; //reset i value 
       idx += get_num_groups(0) * get_local_size(0); //increment our thread index
     }
-    i++;  
+    i++; //increment i value
   }
   atomic_add(results2,localCount);     //add the localCount to results (global count)
 }
