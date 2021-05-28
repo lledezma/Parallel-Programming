@@ -19,11 +19,11 @@ __kernel void match(__global char *pattern,
 }
 
 
-__kernel void match2(__global char *pattern,                 
-                     __global char *sequence,                    
-                     __global int *results2,                    
-                              int patLength,                 
-                              int seqLength)                
+kernel void match2(global char *pattern,                 
+                   global char *sequence,                    
+                   global int *results2,                    
+                          int patLength,                 
+                          int seqLength)                
 {                                                            
   int idx = get_global_id(0);                       //Get our global thread ID 
   int localCount = 0;                               //local match count 
