@@ -29,9 +29,9 @@ int main() {
 	cudaMallocManaged(&d_c, bytes);
 	
 	//Initializing memory
-  for(int i = 1; i <= Num; ++i){
-    d_a[i-1] = i;
-    d_b[i-1] = i;
+  	for(int i = 1; i <= Num; ++i){
+   	    d_a[i-1] = i;
+    	    d_b[i-1] = i;
 	}
 
 	//Number a threads per block
@@ -41,7 +41,7 @@ int main() {
 	int gridSize = (Num + blockSize - 1) / blockSize;
 
 	//Launch Kernel
-	add<<<blockSize,gridSize>>>(d_a,d_b,d_c,Num);
+	add<<<gridSize,blockSize>>>(d_a,d_b,d_c,Num);
 
 	//wait for all commands to be completed
 	cudaDeviceSynchronize();
