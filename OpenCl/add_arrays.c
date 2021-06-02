@@ -51,7 +51,7 @@ int main(int argc, const char * argv[]) {
     int* h_c;
     
     //allocating host memory
-    int bytes = num*sizeof(int);
+    size_t bytes = num*sizeof(int);
     h_a = (int*)malloc(bytes);
     h_b = (int*)malloc(bytes);
     h_c = (int*)malloc(bytes);
