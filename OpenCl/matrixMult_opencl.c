@@ -52,10 +52,10 @@ int main(int argc, const char * argv[]) {
     int* h_c;
     
     //rows and columns
-   const int rowA = 15;
-   const int colA = 15;
-   const int rowB = colA;
-   const int colB = 10;
+    const int rowA = 15;
+    const int colA = 15;
+    const int rowB = colA;
+    const int colB = 10;
     
     //allocating host memory
     h_a = (int*)malloc((colA*rowA)*sizeof(int));
@@ -107,6 +107,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    //create the program
     program = clCreateProgramWithSource(context, 1, (const char **)&KernelSource, NULL, &err);
     if(err != CL_SUCCESS){
         printf("Error creating the program\n");
@@ -120,6 +121,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    //create the kernel
     kernel = clCreateKernel(program, "multiMatrix", &err);
     if(err != CL_SUCCESS){
         printf("error creating the kernel\n");

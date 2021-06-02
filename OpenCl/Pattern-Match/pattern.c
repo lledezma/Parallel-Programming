@@ -39,7 +39,6 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
 
-
     //get device ID
     err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
     if(err != CL_SUCCESS){
@@ -70,6 +69,7 @@ int main(int argc, const char * argv[]) {
        return 1;
    }
 
+    //create the program
     program = clCreateProgramWithSource(context, 1, (const char **)&KernelSource, NULL, &err);
     if(err != CL_SUCCESS){
         printf("Error creating the program\n");
@@ -83,6 +83,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
 
+    //create the kernel
     kernel = clCreateKernel(program, "match", &err);
     if(err != CL_SUCCESS){
         printf("error creating the kernel\n");

@@ -102,6 +102,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    //create the program
     program = clCreateProgramWithSource(context, 1, (const char **)&KernelSource, NULL, &err);
     if(err != CL_SUCCESS){
         printf("Error creating the program\n");
@@ -115,6 +116,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
+    //create the kernel
     kernel = clCreateKernel(program, "addArray", &err);
     if(err != CL_SUCCESS){
         printf("error creating the kernel\n");
