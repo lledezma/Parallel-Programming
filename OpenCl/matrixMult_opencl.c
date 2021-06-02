@@ -66,9 +66,11 @@ int main(int argc, const char * argv[]) {
     for(int i = 0; i < (colA*rowA); i++){
         h_a[i] = i+1;
     }
+
     for(int i = 0; i < (colB*rowB); i++){
         h_b[i] = i+1;
     }
+
     // # of platform IDs || platform || # of OpenCL platforms available
     err = clGetPlatformIDs(1, &platform, NULL);
     if(err != CL_SUCCESS){
@@ -110,7 +112,8 @@ int main(int argc, const char * argv[]) {
         printf("Error creating the program\n");
         return EXIT_FAILURE;
     }
-    // built the program
+
+    // build the program
     err = clBuildProgram(program, 1, &device_id, NULL, NULL, NULL);
     if(err != CL_SUCCESS){
         printf("Error building the program\n");

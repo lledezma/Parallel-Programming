@@ -61,6 +61,7 @@ int main(int argc, const char * argv[]) {
         h_a[i] = i+1;
         h_b[i] = i+1;
     }
+
     // # of platform IDs || platform || # of OpenCL platforms available
     err = clGetPlatformIDs(1, &platform, NULL);
     if(err != CL_SUCCESS){
@@ -106,7 +107,8 @@ int main(int argc, const char * argv[]) {
         printf("Error creating the program\n");
         return EXIT_FAILURE;
     }
-    // built the program
+
+    // build the program
     err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
     if(err != CL_SUCCESS){
         printf("Error building the program\n");
