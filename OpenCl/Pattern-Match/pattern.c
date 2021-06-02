@@ -76,7 +76,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
 
-    // built the program
+    // build the program
     err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
     if(err != CL_SUCCESS){
         printf("Error building the program.....%d\n",err);
