@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <OpenCL/opencl.h>
-#include <stdio.h>
 
 #define USE_CPU
 

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <OpenCL/opencl.h>
-#include <stdio.h>
 
 long LoadOpenFile(char const* path, char **buf); //Function to Open Files
 int MaxCompUnits(); //get the max compute units available

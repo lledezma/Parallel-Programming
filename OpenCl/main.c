@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <OpenCL/opencl.h>
-#include <stdio.h>
 
 // The kernel
 const char *KernelSource =                                     "\n" \
