@@ -11,7 +11,7 @@ __global__ void add(int *a, int *b, int *c, int Num) {
 	while(idx < Num) {
 		c[idx] = a[idx] + b[idx];
 		//increment thread index
-  	idx += blockDim.x * gridDim.x;  
+  		idx += blockDim.x * gridDim.x;  
 	}
 }
 
