@@ -68,8 +68,8 @@ void *minVal(void* threadid){		//function to find the min value in c array
 				c[n-1] = c[idx];	//c[n-1] will hold the min value in the array
 			pthread_mutex_unlock(&pmutex);	//Thread releases the lock
 		}
-		else if(c[idx] < c[thread_id*size+(size-1)]){ 	//c[thread_id*size+(size-1)] holds each thread's min value
-			c[thread_id*size+(size-1)] = c[idx];
+		else if(c[idx] < c[(idx-i)+(size-1)]){ 	//c[thread_id*size+(size-1)] holds each thread's min value
+			c[(idx-i)+(size-1)] = c[idx];
 		}
 	}
 	return NULL;
