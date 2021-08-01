@@ -23,9 +23,7 @@ int main()
 {
 	
 	thread* t = new thread[num_threads];
-
 	int size = n/num_threads;		//size of partition
-
 
 	for(int i = 0; i < 100; i++){
 		a[i] = rand() %100;
@@ -41,10 +39,10 @@ int main()
 		t[i].join();
 	}
 
-
 	for(int i = 0; i < num_threads; i++){
 		t[i] = thread(myMin, i, size);
 	}
+
 	for(int i = 0; i < num_threads; i++){
 		t[i].join();
 	}
@@ -59,8 +57,7 @@ void mySum(int thread_id, int size){	//function to add our arrays
 	int idx;
 	mylock.lock();
 	cout << "Hello from thread: " << thread_id << endl;
-	for(int i =0; i < size;i++)
-	{
+	for(int i =0; i < size;i++) {
 		idx = thread_id*size+i;
 		c[idx] = a[idx] + b[idx];
 		cout << a[idx] << " + " << b[idx] << " = " << c[idx] << " | " << "........" << idx << endl;
@@ -69,23 +66,18 @@ void mySum(int thread_id, int size){	//function to add our arrays
 	mylock.unlock();
 }
 
-void myMin(int thread_id, int size) //function to find the min value in c array
-{
+void myMin(int thread_id, int size) { //function to find the min value in c array
 	int idx;
 	mylock.lock();
-	for(int i =0; i < size;i++)
-	{
+	for(int i =0; i < size;i++) {
 		idx = thread_id*size+i;
-		if(i == size-1)
-		{
+		if(i == size-1) {
 			if(c[idx] < c[n-1]){
 				c[n-1] = c[idx];
 			}
 		}
 		else if (c[idx] < c[thread_id*size+size-1])
-		{
 			c[thread_id*size+size-1] = c[idx];
-		}
 		this_thread::sleep_for(5ms);
 	}
 	mylock.unlock();
