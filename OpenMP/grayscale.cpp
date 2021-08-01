@@ -32,9 +32,8 @@ int main() {
 		printf("Total Number of threads: %d\n", h);
 		
 		sw.start();
-	#  pragma omp parallel num_threads(h) 
-		for (int i = 0; i < size; i++)
-		{
+	  #pragma omp parallel num_threads(h) 
+		for (int i = 0; i < size; i++) {
 			double frstPixel = image.getPixel(omp_get_thread_num()*size+i).R * 0.3 + image.getPixel(omp_get_thread_num() * size + i).G * 0.59 + image.getPixel(omp_get_thread_num() * size + i).B * 0.11;
 			image.setPixel(omp_get_thread_num() * size + i, frstPixel);
 		}
