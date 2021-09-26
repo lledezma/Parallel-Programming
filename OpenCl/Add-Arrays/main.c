@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     size_t globalWorkSize;  //global work items
     size_t localWorkSize;   //work items per group
 
-    const int num = 96;     //size of arrays
+    const int num = 2560;     //size of arrays
     
     //declaring device variables
     cl_mem d_a;
@@ -133,7 +133,7 @@ int main(int argc, const char * argv[]) {
     }
     
     globalWorkSize = maxCompUnits();      //number of global work items
-    localWorkSize = 2;          	 //number of work items per group
+    localWorkSize = maxCompUnits();          	 //number of work items per group
     
     //Execute the kernel
     err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, NULL);
@@ -182,14 +182,14 @@ int main(int argc, const char * argv[]) {
 int maxCompUnits(){
     int err;
     cl_device_id device_id;
-    cl_uint maxComputeUnits;
+    size_t maxComputeUnits;
     err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
     if(err != CL_SUCCESS){
         printf("Error getting device id from maxCompUnits function\n");
         return EXIT_FAILURE;
     }
     
-    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
+    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
     if(err != CL_SUCCESS){
         printf("Error getting device info from maxCompUnits function\n");
         return EXIT_FAILURE;

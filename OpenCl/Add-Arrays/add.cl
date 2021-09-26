@@ -20,36 +20,32 @@ __kernel void addArray(__global int *a,
                        __global int *b,                       
                        __global int *c,                       
                        __global int *min_val, const unsigned int n)
+                       // __local int* some;
 {         
-   //Get our global thread ID  
-   int idx = get_global_id(0);                                
-   int private_min = 0;  
-   __global int* mutex;         //global mutex lock
-   __local int group_min_val;   //local/group min value;
+   int idx = get_global_id(0);    //thread id                             
+   int private_min = 0;           //private min value
+   __global int* mutex;            //global mutex lock
+   __local int group_min_val;     //local/group min value;
+
    //Check bounds                                             
     while(idx < n){                                           
-       c[idx] = a[idx] + b[idx];                              
-       //increment thread index                               
+       c[idx] = a[idx] + b[idx];   //write result to global memory                                                        
        idx += get_num_groups(0) * get_local_size(0);  //increment thread index        
     }   
-    barrier(CLK_GLOBAL_MEM_FENCE); //all threads have written to global C-array
-    group_min_val = c[n-1];     //can be any value in the c array
-    *min_val = c[0];            //can be any value in the c array
+
+    mem_fence(CLK_GLOBAL_MEM_FENCE); //all threads have written to global C-array
+    if(get_global_id(0) == 0)
+        group_min_val = c[0];     
     private_min = setMin(c, get_global_id(0), n);  
-    while(LOCK(mutex)) //lock
+    mem_fence(CLK_GLOBAL_MEM_FENCE); //memory barrier
+
+    while(LOCK(mutex)) //lock, 
     {
-        if(private_min < group_min_val)
+        if(private_min < group_min_val )
             group_min_val = private_min;
         UNLOCK(mutex);  //unlock
     }
-    barrier(CLK_GLOBAL_MEM_FENCE); //sync all global threads
-    if(get_local_id(0) == 0) //threads with local id = 0 write to global min
-    {
-        while(LOCK(mutex))
-        {
-            if(group_min_val < *min_val)
-                atomic_xchg(min_val, group_min_val);
-            UNLOCK(mutex);
-        }
-    }
-}                                                          
+    barrier(CLK_LOCAL_MEM_FENCE);
+    if(get_local_id(0) == 0) //threads with local id = 0 writes to global min
+        *min_val = group_min_val;
+} 
