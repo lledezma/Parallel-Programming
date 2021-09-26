@@ -20,7 +20,6 @@ __kernel void addArray(__global int *a,
                        __global int *b,                       
                        __global int *c,                       
                        __global int *min_val, const unsigned int n)
-                       // __local int* some;
 {         
    int idx = get_global_id(0);    //thread id                             
    int private_min = 0;           //private min value
