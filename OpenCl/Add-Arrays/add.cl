@@ -1,4 +1,4 @@
-// function to the min value for each thread
+// function to find the min value for each thread
 int setMin(global int* c, int idx, const unsigned int n)       
 {       
     int size = n/get_global_size(0);  
