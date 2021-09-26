@@ -165,6 +165,7 @@ int main(int argc, const char * argv[]) {
     clReleaseMemObject(d_a);
     clReleaseMemObject(d_b);
     clReleaseMemObject(d_c);
+    clReleaseMemObject(d_min_value);
     clReleaseProgram(program);
     clReleaseKernel(kernel);
     clReleaseCommandQueue(queue);
