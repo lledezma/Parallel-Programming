@@ -27,8 +27,7 @@ __kernel void addArray(__global int *a,
     mem_fence(CLK_GLOBAL_MEM_FENCE); //all threads have written to global C-array
     if(get_global_id(0) == 0)
         *min_val = c[0];     
-    private_min = setMin(c, get_global_id(0), n);  
-    mem_fence(CLK_GLOBAL_MEM_FENCE); //memory barrier
+    private_min = setMin(c, get_global_id(0), n); 
     if(private_min < *min_val)
         atomic_xchg(min_val, private_min);
 } 
