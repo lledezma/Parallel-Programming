@@ -222,6 +222,8 @@ int main(int argc, const char * argv[]) {
     clReleaseContext(context);
     
     //release host memory
+    free(platform);
+    free(device_id);
     free(h_a);
     free(h_b);
     free(h_c);
