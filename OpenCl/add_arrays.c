@@ -4,7 +4,7 @@
 #include <math.h>
 #include <OpenCL/opencl.h>
 
-#define USE_CPU
+// #define USE_CPU
 
 // The kernel
 const char *KernelSource =                                     "\n" \
@@ -24,7 +24,7 @@ const char *KernelSource =                                     "\n" \
 "    }                                                          \n" \
 "}                                                              \n" ;
 
-int maxCompUnits(); //get the max compute units available
+int maxProcElements(); //get the max processing elements available
 
 int main(int argc, const char * argv[]) {
     int err;                    //varible to track errors
@@ -149,7 +149,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = maxCompUnits();      //number of global work items
+    globalWorkSize = maxProcElements();      //number of global work items
     localWorkSize = 2;          	 //number of work items per group
     
     //Execute the kernel
@@ -170,7 +170,7 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print device info, compute units, and results
-    printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxCompUnits());
+    printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxProcElements());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
@@ -192,10 +192,10 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-int maxCompUnits(){
+int maxProcElements(){
     int err;
     cl_device_id device_id;
-    cl_uint maxComputeUnits;
+    cl_uint maxComputeUnits;    //max compute units
     #ifdef USE_CPU
         err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
     #else
@@ -211,6 +211,13 @@ int maxCompUnits(){
         printf("Error getting device info from maxCompUnits function\n");
         return EXIT_FAILURE;
     }
-    return maxComputeUnits;
+
+    size_t maxWorkItems;    //max work items per group
+    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(maxWorkItems), &maxWorkItems, NULL);
+    if(err != CL_SUCCESS){
+        printf("Error getting device info from maxWorkItems function\n");
+        return EXIT_FAILURE;
+    }
+    return (maxComputeUnits*maxWorkItems);
 }
 
