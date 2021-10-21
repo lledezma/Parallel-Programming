@@ -92,7 +92,7 @@ int main(int argc, const char * argv[]) {
 
         //allocate memory for device IDs
         device_id = calloc(sizeof(cl_device_id), num_devices); 
-        //get ids of all devices available
+        //get ids of all available devices
         err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); 
         if(err != CL_SUCCESS){
             printf("Error getting IDs of devices.\n");
