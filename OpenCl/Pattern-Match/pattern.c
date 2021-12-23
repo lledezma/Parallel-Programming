@@ -25,7 +25,7 @@ int main(int argc, const char * argv[]) {
     cl_mem d_results;       //device variable to store results
     
     //host variables
-    int h_results;          //host variable to store results
+    int h_results = 0;          //host variable to store results
     char* h_pattern = "GGATCGA";      
     char* h_sequence = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
     int h_pSize = (int)strlen(h_pattern);       //length of pattern
