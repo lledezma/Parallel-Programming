@@ -26,7 +26,10 @@ int main(){
   //host variables
   int h_results;        //host varible to store results  
   const char* h_pattern = "GGATCGA";
-  const char* h_sequence = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTAAGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGTTGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTACAGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
+  const char* h_sequence = "GAATTGAATTCAGGATCGAGTTACAGTTAAATTCAGTTACGGATCGAAGTTA\n\
+                            AGTTAAGTTAGAATATTCAGTGGATCGATACAGTTAAATTCAGTTACACAGT\n\
+                            TGGATCGAAAGTTAAGTTAGAATATTCAGTTAGGAATTCAGGGATCGATTAC\n\
+                            AGTTAAATTCAGTTTTAAGTTAATCAGTTAC";
   int h_patLength = (int)strlen(h_pattern); //length of pattern
   int h_seqLength = (int)strlen(h_sequence);  //length of sequence
 
