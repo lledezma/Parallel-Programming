@@ -24,8 +24,8 @@ const char *KernelSource =                                     "\n" \
 
 int main(int argc, const char * argv[]) {
     int err; //varible to track errors
-    cl_platform_id* platform;
-    cl_device_id* device_id;
+    cl_platform_id* platforms;
+    cl_device_id* device_ids;
     cl_context context;
     cl_command_queue queue;
     cl_program program;
@@ -67,9 +67,9 @@ int main(int argc, const char * argv[]) {
     }
 
     //allocate memory for platform IDs
-    platform = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms);
+    platforms = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms);
     //get the IDs of available platforms
-    err = clGetPlatformIDs(num_platforms, platform, NULL); 
+    err = clGetPlatformIDs(num_platforms, platforms, NULL); 
     if(err != CL_SUCCESS){
         printf("Error getting the platforms\n");
         return EXIT_FAILURE;
@@ -81,49 +81,49 @@ int main(int argc, const char * argv[]) {
     cl_ulong time_start;    //event start time
     cl_ulong time_end;      //event end time
 
-    for(cl_uint h = 0; h < num_platforms; h++)
+    for(cl_uint platform = 0; platform < num_platforms; platform++)
     {
         //get number of devices found
-        err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices); 
+        err = clGetDeviceIDs(platforms[platform], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices); 
         if(err != CL_SUCCESS){
             printf("Error getting the number of devices found.\n");
             return EXIT_FAILURE;
         }
 
         //allocate memory for device IDs
-        device_id = calloc(sizeof(cl_device_id), num_devices); 
+        device_ids = calloc(sizeof(cl_device_id), num_devices); 
         //get ids of all available devices
-        err = clGetDeviceIDs(platform[h], CL_DEVICE_TYPE_ALL, num_devices, device_id, NULL); 
+        err = clGetDeviceIDs(platforms[platform], CL_DEVICE_TYPE_ALL, num_devices, device_ids, NULL); 
         if(err != CL_SUCCESS){
             printf("Error getting IDs of devices.\n");
             return EXIT_FAILURE;
         }
 
         //create context
-        context = clCreateContext(0, num_devices, device_id, NULL, NULL, &err);
+        context = clCreateContext(0, num_devices, device_ids, NULL, NULL, &err);
         if(err != CL_SUCCESS){
             printf("Could not create context\n");
             return EXIT_FAILURE;
         }
 
-        for(cl_uint j = 0; j < num_devices; j++)
+        for(cl_uint device = 0; device < num_devices; device++)
         {
             //get the max compute units
-            err = clGetDeviceInfo(device_id[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
+            err = clGetDeviceInfo(device_ids[device], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
             if(err != CL_SUCCESS){
                 printf("Error getting the max compute units\n");
                 return EXIT_FAILURE;
             }
 
             //get the name of the device
-            err = clGetDeviceInfo(device_id[j], CL_DEVICE_NAME, 128, nameOfDevice, NULL);
+            err = clGetDeviceInfo(device_ids[device], CL_DEVICE_NAME, 128, nameOfDevice, NULL);
             if(err != CL_SUCCESS){
                 printf("Error getting device name of the device\n");
                 return EXIT_FAILURE;
             }
 
             //create command queue
-            queue = clCreateCommandQueue(context, device_id[j], CL_QUEUE_PROFILING_ENABLE, &err);
+            queue = clCreateCommandQueue(context, device_ids[device], CL_QUEUE_PROFILING_ENABLE, &err);
             if(err != CL_SUCCESS){
                 printf("Error creating the command queue\n");
                 return EXIT_FAILURE;
@@ -222,8 +222,8 @@ int main(int argc, const char * argv[]) {
     clReleaseContext(context);
     
     //release host memory
-    free(platform);
-    free(device_id);
+    free(platforms);
+    free(device_ids);
     free(h_a);
     free(h_b);
     free(h_c);
