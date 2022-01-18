@@ -170,7 +170,7 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print device info, compute units, and results
-    printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxProcElements());
+    printf("Running on device: %s with %d processing elements.\n", nameOfDevice, maxProcElements());
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
