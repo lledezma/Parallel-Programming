@@ -1,5 +1,5 @@
 # Parallel-Programming
-This repository contains parallel programming files that use different APIs like; CUDA, Opencl, OpenMP, and Posix Threads. 
+This repository contains parallel programming files that use different APIs like; CUDA, Opencl, OpenMP, OpenMPI and Posix Threads. 
 ## Programs:
 1. Matrix Multiplication.
 1. Array Addition.
