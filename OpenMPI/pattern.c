@@ -45,6 +45,11 @@ int main()
 		printf("TOTAL NUMBER OF MATCHES: %d\n", total_matches);
 	}
 
+	// MPI_Reduce(&local_matches, &total_matches, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+	// if(process_id == 0) {
+	// 	printf("Total matches: %d\n", total_matches);
+	// }
+
 	MPI_Finalize(); //Shut down MPI
 	return 0;
 
