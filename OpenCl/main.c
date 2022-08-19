@@ -1,4 +1,4 @@
-                //Adding two arrays using all available devices and comparing times
+                //Adding two arrays using all available devices and comparing execution time
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
