@@ -26,10 +26,11 @@ int main()
 	MPI_Comm_size(MPI_COMM_WORLD, &process_size); //Get the number of processes
 	MPI_Comm_rank(MPI_COMM_WORLD, &process_id);	  //Get the process rank(id)
 
+	MPI_Status status;
+
 	local_matches = pattern_match(sequence, pattern_string, sequence_len, pattern_string_len);
 
 	if(process_id != 0) {
-		printf("Process rank: %d...total matches found: %d\n", process_id,local_matches);
 		MPI_Send(&local_matches, 1, MPI_INT, 0, 0, MPI_COMM_WORLD );
 	}
 	else {
@@ -38,7 +39,8 @@ int main()
 
 		//Gather number of local matches
 		for(int process_source = 1; process_source < process_size; process_source++) {
-			MPI_Recv(&local_matches, 1, MPI_INT, process_source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			MPI_Recv(&local_matches, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+			printf("Receiving from process rank: %d...total matches found: %d\n", status.MPI_SOURCE, local_matches);
 			total_matches+=local_matches; //add local match count to global match count
 		}
 
