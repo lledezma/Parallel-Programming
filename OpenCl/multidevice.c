@@ -42,37 +42,45 @@ void *routine(void* structData)
   cl_program program;
   cl_kernel kernel;
   cl_event event;
-  cl_ulong time_start;     //event start time
-  cl_ulong time_end;       //event end time
-  size_t globalWorkSize;   //global work items
-  size_t localWorkSize;    //work items per group
-  char nameOfDevice[128];  //name of device
-  cl_uint maxComputeUnits; //max compute units
-  size_t maxWorkItems;     //max work group size
+  cl_ulong time_start;        //event start time
+  cl_ulong time_end;          //event end time
+  cl_uint maxComputeUnits;    //max compute units
+  cl_device_type device_type; //device type
+  char nameOfDevice[128];     //name of device
+  size_t maxWorkItems;        //max work group size
+  size_t globalWorkSize;      //global work items
+  size_t localWorkSize;       //work items per group
+  
 
   //declaring device variables
   cl_mem d_a;
   cl_mem d_b;
   cl_mem d_c;
 
+  err = clGetDeviceInfo(data->device, CL_DEVICE_TYPE, sizeof(cl_device_type), &device_type, NULL);
+  if(err != CL_SUCCESS){
+      printf("Error getting the device type.\n");
+      exit(EXIT_FAILURE);
+  }
+
   //get the max compute units
   err = clGetDeviceInfo(data->device, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
   if(err != CL_SUCCESS){
-      printf("Error getting the max compute units\n");
+      printf("Error getting the max compute units.\n");
       exit(EXIT_FAILURE);
   }
 
   //get the max work group size
   err = clGetDeviceInfo(data->device, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(maxWorkItems), &maxWorkItems, NULL);
   if(err != CL_SUCCESS){
-      printf("Error getting device info from maxCompUnits function\n");
+      printf("Error getting device info from maxCompUnits function.\n");
       exit(EXIT_FAILURE);
   }
 
   //get the name of the device
   err = clGetDeviceInfo(data->device, CL_DEVICE_NAME, 128, nameOfDevice, NULL);
   if(err != CL_SUCCESS){
-      printf("Error getting device name of the device\n");
+      printf("Error getting device name of the device.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -80,7 +88,7 @@ void *routine(void* structData)
   //create command queue
   queue = clCreateCommandQueue(data->context, data->device, CL_QUEUE_PROFILING_ENABLE, &err);
   if(err != CL_SUCCESS){
-      printf("Error creating the command queue\n");
+      printf("Error creating the command queue.\n");
       exit(EXIT_FAILURE);
   }
             
@@ -88,7 +96,7 @@ void *routine(void* structData)
   //create the program
   program = clCreateProgramWithSource(data->context, 1, (const char **)&KernelSource, NULL, &err);
   if(err != CL_SUCCESS){
-      printf("Error creating the program\n");
+      printf("Error creating the program.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -96,14 +104,14 @@ void *routine(void* structData)
   // build the program
   err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
   if(err != CL_SUCCESS){
-      printf("Error building the program\n");
+      printf("Error building the program.\n");
       exit(EXIT_FAILURE);
   }
 
   //create the kernel
   kernel = clCreateKernel(program, "addArray", &err);
   if(err != CL_SUCCESS){
-      printf("error creating the kernel\n");
+      printf("error creating the kernel.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -113,7 +121,7 @@ void *routine(void* structData)
   d_b = clCreateBuffer(data->context, CL_MEM_READ_ONLY, num*sizeof(int), NULL, &err);
   d_c = clCreateBuffer(data->context, CL_MEM_READ_WRITE, num*sizeof(int), NULL, &err);
   if(err != CL_SUCCESS){
-      printf("Error allocating device memory\n");
+      printf("Error allocating device memory.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -122,7 +130,7 @@ void *routine(void* structData)
   err = clEnqueueWriteBuffer(queue, d_a, CL_TRUE, 0, num*sizeof(int), data->h_a, 0, NULL, NULL);
   err |= clEnqueueWriteBuffer(queue, d_b, CL_TRUE, 0, num*sizeof(int), data->h_b, 0, NULL, NULL);
   if(err != CL_SUCCESS){
-      printf("Error copying data to device variables\n");
+      printf("Error copying data to device variables.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -132,11 +140,11 @@ void *routine(void* structData)
   err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&d_c);
   err |= clSetKernelArg(kernel, 3, sizeof(int), (void*)&num);
   if(err != CL_SUCCESS){
-      printf("Error setting the kernel arguments\n");
+      printf("Error setting the kernel arguments.\n");
       exit(EXIT_FAILURE);
   }
 
-  if(data->thread_id != 0){
+  if(device_type == CL_DEVICE_TYPE_GPU){
     globalWorkSize = maxComputeUnits*maxWorkItems;
     localWorkSize = maxWorkItems;
   }
@@ -148,7 +156,7 @@ void *routine(void* structData)
   //Execute the kernel
   err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &globalWorkSize, &localWorkSize, 0, NULL, &event);
   if(err != CL_SUCCESS){
-      printf("Error executing the Kernel\n");
+      printf("Error executing the Kernel.\n");
       exit(EXIT_FAILURE);
   }
 
@@ -159,7 +167,7 @@ void *routine(void* structData)
   //copy device memory to host memory
   err = clEnqueueReadBuffer(queue, d_c, CL_TRUE, 0, num*sizeof(int), data->h_c, 0, NULL, NULL);
   if(err != CL_SUCCESS){
-      printf("Error copying device memory to host memory\n");
+      printf("Error copying device memory to host memory.\n");
       exit(EXIT_FAILURE);
   }
   
@@ -168,8 +176,8 @@ void *routine(void* structData)
   double nanoSeconds = time_end-time_start;
   //*   print device info, compute units, processing elements and results
   printf("Thread id: %d\n", data->thread_id);
-  printf("Running on device: %s with %d compute units and %d.\n", nameOfDevice, maxComputeUnits);
-  printf("OpenCl Execution time is: %0.3f milliseconds \n\n",nanoSeconds / 1000000.0);
+  printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxComputeUnits);
+  printf("OpenCl Execution time is: %0.3f milliseconds. \n\n",nanoSeconds / 1000000.0);
 
   //release device memory
   clReleaseEvent(event);
@@ -208,7 +216,7 @@ int main()
   //get plaform id
   err = clGetPlatformIDs(1, &platform, NULL);
   if(err != CL_SUCCESS){
-      printf("Error getting the platforms\n");
+      printf("Error getting the platforms.\n");
       return EXIT_FAILURE;
   }
 
@@ -233,7 +241,7 @@ int main()
   //create context
   context = clCreateContext(0, num_devices, device_ids, NULL, NULL, &err);
   if(err != CL_SUCCESS){
-      printf("Could not create context\n");
+      printf("Could not create context.\n");
       return EXIT_FAILURE;
   }
 
