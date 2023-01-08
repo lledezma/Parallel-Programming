@@ -245,18 +245,18 @@ int main()
       return EXIT_FAILURE;
   }
 
-  pthread_t threads[(int)num_devices];
-  struct DataStruct thread_structs[(int)num_devices];
+  pthread_t threads[num_devices];
+  struct DataStruct thread_structs[num_devices];
 
   for(cl_uint device_id = 0; device_id < num_devices; device_id++)
   {
-    thread_structs[(int)device_id].thread_id = (int)device_id;
-    thread_structs[(int)device_id].device = device_ids[device_id];
-    thread_structs[(int)device_id].context = context;
-    thread_structs[(int)device_id].h_a = h_a;
-    thread_structs[(int)device_id].h_b = h_b;
-    thread_structs[(int)device_id].h_c = h_c;
-    pthread_create(&threads[(long)device_id], NULL, routine, (void*) &thread_structs[(int)device_id]);
+    thread_structs[device_id].thread_id = device_id;
+    thread_structs[device_id].device = device_ids[device_id];
+    thread_structs[device_id].context = context;
+    thread_structs[device_id].h_a = h_a;
+    thread_structs[device_id].h_b = h_b;
+    thread_structs[device_id].h_c = h_c;
+    pthread_create(&threads[(long)device_id], NULL, routine, (void*) &thread_structs[device_id]);
   }
 
   for(long i = 0; i < num_devices; i++)
