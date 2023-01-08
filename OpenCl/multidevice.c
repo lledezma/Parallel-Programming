@@ -144,13 +144,13 @@ void *routine(void* structData)
       exit(EXIT_FAILURE);
   }
 
-  if(device_type == CL_DEVICE_TYPE_GPU){
-    globalWorkSize = maxComputeUnits*maxWorkItems;
-    localWorkSize = maxWorkItems;
-  }
-  else{
+  if(device_type == CL_DEVICE_TYPE_CPU){
     globalWorkSize = 6;
     localWorkSize = 1;
+  }
+  else{
+    globalWorkSize = maxComputeUnits*maxWorkItems;
+    localWorkSize = maxWorkItems;
   }
 
   //Execute the kernel
