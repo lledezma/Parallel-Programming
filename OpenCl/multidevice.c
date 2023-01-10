@@ -51,6 +51,8 @@ void *routine(void* structData)
   size_t globalWorkSize;      //global work items
   size_t localWorkSize;       //work items per group
   
+  //allocating host memory
+  data->h_c = (int*)malloc(num*sizeof(int));
 
   //declaring device variables
   cl_mem d_a;
@@ -84,14 +86,12 @@ void *routine(void* structData)
       exit(EXIT_FAILURE);
   }
 
-
   //create command queue
   queue = clCreateCommandQueue(data->context, data->device, CL_QUEUE_PROFILING_ENABLE, &err);
   if(err != CL_SUCCESS){
       printf("Error creating the command queue.\n");
       exit(EXIT_FAILURE);
   }
-            
 
   //create the program
   program = clCreateProgramWithSource(data->context, 1, (const char **)&KernelSource, NULL, &err);
@@ -99,7 +99,6 @@ void *routine(void* structData)
       printf("Error creating the program.\n");
       exit(EXIT_FAILURE);
   }
-
 
   // build the program
   err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
@@ -115,7 +114,6 @@ void *routine(void* structData)
       exit(EXIT_FAILURE);
   }
 
-
   //allocate device memory
   d_a = clCreateBuffer(data->context, CL_MEM_READ_ONLY, num*sizeof(int), NULL, &err);
   d_b = clCreateBuffer(data->context, CL_MEM_READ_ONLY, num*sizeof(int), NULL, &err);
@@ -124,7 +122,6 @@ void *routine(void* structData)
       printf("Error allocating device memory.\n");
       exit(EXIT_FAILURE);
   }
-
 
   //copy data from host variables to device variables
   err = clEnqueueWriteBuffer(queue, d_a, CL_TRUE, 0, num*sizeof(int), data->h_a, 0, NULL, NULL);
@@ -163,7 +160,7 @@ void *routine(void* structData)
   //wait for all commands in the queue to be processed and completed
   clWaitForEvents(1, &event);
   clFinish(queue);
-  
+
   //copy device memory to host memory
   err = clEnqueueReadBuffer(queue, d_c, CL_TRUE, 0, num*sizeof(int), data->h_c, 0, NULL, NULL);
   if(err != CL_SUCCESS){
@@ -187,6 +184,7 @@ void *routine(void* structData)
   clReleaseProgram(program);
   clReleaseKernel(kernel);
   clReleaseCommandQueue(queue);
+
 }
 
 int main()
@@ -200,13 +198,11 @@ int main()
   //declaring host variables
   int* h_a;
   int* h_b;
-  int* h_c;
 
   //initializing host memory
   size_t bytes = num*sizeof(int);
   h_a = (int*)malloc(bytes);
   h_b = (int*)malloc(bytes);
-  h_c = (int*)malloc(bytes);
 
   for(int i = 0; i < num; i++){
       h_a[i] = i+1;
@@ -219,7 +215,6 @@ int main()
       printf("Error getting the platforms.\n");
       return EXIT_FAILURE;
   }
-
 
   //get number of devices found
   err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
@@ -255,18 +250,22 @@ int main()
     thread_structs[device_id].context = context;
     thread_structs[device_id].h_a = h_a;
     thread_structs[device_id].h_b = h_b;
-    thread_structs[device_id].h_c = h_c;
     pthread_create(&threads[(long)device_id], NULL, routine, (void*) &thread_structs[device_id]);
   }
 
-  for(long i = 0; i < num_devices; i++)
+  for(long i = 0; i < num_devices; i++){
     pthread_join(threads[i], NULL);
+  }
 
   //release host memory
+  for(int i = 0; i < num_devices; i++){
+    free(thread_structs[i].h_c);
+  }
   free(h_a);
   free(h_b);
-  free(h_c);
   free(device_ids);
+
+  //release device memory
   clReleaseContext(context);
   return 0;
 }
