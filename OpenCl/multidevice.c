@@ -59,6 +59,7 @@ void *routine(void* structData)
   cl_mem d_b;
   cl_mem d_c;
 
+  //get the device type
   err = clGetDeviceInfo(data->device, CL_DEVICE_TYPE, sizeof(cl_device_type), &device_type, NULL);
   if(err != CL_SUCCESS){
       printf("Error getting the device type.\n");
