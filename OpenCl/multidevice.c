@@ -118,7 +118,7 @@ void *routine(void* structData)
   //allocate device memory
   d_a = clCreateBuffer(data->context, CL_MEM_READ_ONLY, num*sizeof(int), NULL, &err);
   d_b = clCreateBuffer(data->context, CL_MEM_READ_ONLY, num*sizeof(int), NULL, &err);
-  d_c = clCreateBuffer(data->context, CL_MEM_READ_WRITE, num*sizeof(int), NULL, &err);
+  d_c = clCreateBuffer(data->context, CL_MEM_WRITE_ONLY, num*sizeof(int), NULL, &err);
   if(err != CL_SUCCESS){
       printf("Error allocating device memory.\n");
       exit(EXIT_FAILURE);
