@@ -8,7 +8,7 @@
 using namespace std;
 
 int badchar[256];
-int globalcount;
+int global_count;
 
 char* loadFile(const char* fileName, int& fsize);
 void ParallelMatchNaive(const char* txt, int N, const char* pat, int M);
@@ -17,7 +17,7 @@ void ParallelMatchBoyerMoore(const char* txt, int N, const char* pat, int M);
 
 
 int main() {
-    int MAXCHAR = 0;
+    const int MAXCHAR = 0;
     const char* text = loadFile("textdata.txt", MAXCHAR);
 
     if (text == nullptr) {
@@ -71,22 +71,22 @@ int main() {
         int M = strlen(pattern[i]);
         preprocessHeuristicArray(pattern[i], M, badchar);
 
-        globalcount = 0;
+        global_count = 0;
         sw.start();
 #pragma omp parallel num_threads(4)
         ParallelMatchNaive(text, N, pattern[i], M);
         sw.stop();
         eTimeNaive = sw.elapsedTime();
-        countNaive = globalcount;
+        countNaive = global_count;
 
 
-        globalcount = 0;
+        global_count = 0;
         sw.start();
 #pragma omp parallel num_threads(4)
         ParallelMatchBoyerMoore(text, N, pattern[i], M);
         sw.stop();
         eTimeBoyer = sw.elapsedTime();
-        countBoyer = globalcount;
+        countBoyer = global_count;
 
         printf("|%-30s|%-10d|%-10.4lf|%-10d|%-10.4lf|\n", pattern[i], countNaive, eTimeNaive, countBoyer, eTimeBoyer);
     }
@@ -100,39 +100,39 @@ int main() {
 void ParallelMatchNaive(const char* txt, int N, const char* pat, int M) {
     int thread_id = omp_get_thread_num();
     int thread_count = omp_get_num_threads();
-    int fountCount = 0;
+    int local_count = 0;
 
     int size = N / thread_count;
-    int eIndex = (thread_id * size) + (size - 1);
-    int sIndex = 0;
+    int end_index = (thread_id * size) + (size - 1);
+    int start_index = 0;
 
     if (thread_id != 0) {
-        sIndex = (thread_id * size) - (M - 1);
+        start_index = (thread_id * size) - (M - 1);
         N = size + (M - 1);
     }
     else {
-        sIndex = thread_id * size;
+        start_index = thread_id * size;
         if (thread_id != thread_count - 1) {
             N = size;
         }
         if (thread_id == thread_count - 1) {
-            eIndex = N;
+            end_index = N;
         }
     }
 
-    for (int i = sIndex; i <= eIndex - M + 1; i++) {
+    for (int i = start_index; i <= end_index - M + 1; i++) {
         int j = 0;
-        while ((j < M) && (txt[sIndex + j] == pat[j])) {
+        while ((j < M) && (txt[start_index + j] == pat[j])) {
             j = j + 1;
         }
         if (j == M) {
-            fountCount = fountCount + 1;
+            local_count = local_count + 1;
         }
-        sIndex += 1;
+        start_index += 1;
     }
 
 #  pragma omp critical
-    globalcount += fountCount;
+    global_count += local_count;
 }
 
 void ParallelMatchBoyerMoore(const char* txt, int N, const char* pat, int M) {
@@ -140,26 +140,26 @@ void ParallelMatchBoyerMoore(const char* txt, int N, const char* pat, int M) {
     int thread_count = omp_get_num_threads();
 
     int size = N / thread_count;
-    int  sIndex = thread_id * size;
-    int eIndex = (thread_id * size) + (size - 1);
-    int localcount = 0;
+    int start_index = thread_id * size;
+    int end_index = (thread_id * size) + (size - 1);
+    int local_count = 0;
 
     if (thread_id == thread_count - 1) {
-        eIndex = N;
+        end_index = N;
     }
     if (thread_id != 0) {
-        sIndex = (thread_id * size) - (M - 1);
+        start_index = (thread_id * size) - (M - 1);
     }
     else {
-        sIndex = thread_id * size;
+        start_index = thread_id * size;
         if (thread_id == thread_count - 1) {
-            eIndex = N;
+            end_index = N;
         }
     }
-    localcount = BoyerMooreMatchWithRange(txt, sIndex, eIndex, pat, M, badchar);
+    local_count = BoyerMooreMatchWithRange(txt, start_index, end_index, pat, M, badchar);
 
 # pragma omp critical
-    globalcount += localcount;
+    global_count += local_count;
 }
 
 char* loadFile(const char* fileName, int& fsize) {
