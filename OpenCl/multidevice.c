@@ -251,7 +251,7 @@ int main()
     thread_structs[device_id].context = context;
     thread_structs[device_id].h_a = h_a;
     thread_structs[device_id].h_b = h_b;
-    pthread_create(&threads[(long)device_id], NULL, routine, (void*) &thread_structs[device_id]);
+    pthread_create(&threads[device_id], NULL, routine, (void*) &thread_structs[device_id]);
   }
 
   for(long i = 0; i < num_devices; i++){
