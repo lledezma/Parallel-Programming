@@ -190,7 +190,7 @@ void *routine(void* structData)
 
 int main()
 {
-  int err;
+  cl_int err;
   cl_platform_id platform;
   cl_device_id* device_ids; //device ids
   cl_context context;
