@@ -37,7 +37,7 @@ struct DataStruct {
 void *routine(void* structData)
 {
   struct DataStruct* data = (struct DataStruct*)structData;
-  cl_uint err;             // var to track errors
+  cl_int err;             // var to track errors
   cl_command_queue queue;
   cl_program program;
   cl_kernel kernel;
@@ -185,7 +185,6 @@ void *routine(void* structData)
   clReleaseProgram(program);
   clReleaseKernel(kernel);
   clReleaseCommandQueue(queue);
-
 }
 
 int main()

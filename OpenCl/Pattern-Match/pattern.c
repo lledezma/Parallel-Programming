@@ -9,7 +9,7 @@ int MaxCompUnits(); //get the max compute units available
 const char* deviceName(); //get the name of device
 
 int main(int argc, const char * argv[]) {
-    int err;                    //varible to track errors
+    cl_int err;                    //varible to track errors
     cl_platform_id platform;
     cl_device_id device_id;
     cl_context context;

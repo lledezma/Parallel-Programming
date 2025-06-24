@@ -27,7 +27,7 @@ const char *KernelSource =                                     "\n" \
 int maxProcElements(); //get the max processing elements available
 
 int main(int argc, const char * argv[]) {
-    int err;                    //varible to track errors
+    cl_int err;                    //varible to track errors
     cl_platform_id platform;
     cl_device_id device_id;
     cl_context context;

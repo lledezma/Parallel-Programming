@@ -23,7 +23,7 @@ const char *KernelSource =                                     "\n" \
 "}                                                              \n" ;
 
 int main(int argc, const char * argv[]) {
-    int err; //varible to track errors
+    cl_int err; //varible to track errors
     cl_platform_id* platforms;
     cl_device_id* device_ids;
     cl_context context;
