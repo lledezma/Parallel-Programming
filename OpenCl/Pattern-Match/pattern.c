@@ -4,9 +4,77 @@
 #include <math.h>
 #include <OpenCL/opencl.h>
 
-long LoadOpenFile(char const* path, char **buf); //Function to Open Files
-int MaxCompUnits(); //get the max compute units available
-const char* deviceName(); //get the name of device
+//Function to Open Files
+long LoadOpenFile(char const* path, char **buf){
+    FILE  *fp;
+    size_t fsz;
+    long   off_end;
+    int    rc;
+
+    /* Open the file */
+    fp = fopen(path, "r");
+    if( NULL == fp ) {
+        return -1L;
+    }
+    rc = fseek(fp, 0L, SEEK_END);
+    if( 0 != rc ) {
+        return -1L;
+    }
+    if( 0 > (off_end = ftell(fp)) ) {
+        return -1L;
+    }
+    fsz = (size_t)off_end;
+    *buf = (char *) malloc( fsz+1);
+    if( NULL == *buf ) {
+        return -1L;
+    }
+    rewind(fp);
+    if( fsz != fread(*buf, 1, fsz, fp) ) {
+        free(*buf);
+        return -1L;
+    }
+    if( EOF == fclose(fp) ) {
+        free(*buf);
+        return -1L;
+    }
+    (*buf)[fsz] = '\0';
+    return (long)fsz;
+}
+
+//get the max compute units available
+int MaxCompUnits(cl_device_id* device_id, cl_int* err){
+    cl_uint maxComputeUnits;
+    *err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, device_id, NULL);
+    if(*err != CL_SUCCESS){
+        printf("Error getting device id from maxCompUnits function\n");
+        return EXIT_FAILURE;
+    }
+    
+    *err = clGetDeviceInfo(*device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
+    if(*err != CL_SUCCESS){
+        printf("Error getting device info from maxCompUnits function\n");
+        return EXIT_FAILURE;
+    }
+    return maxComputeUnits;
+}
+
+//get the name of device
+const char* deviceName(cl_device_id* device_id, cl_int* err){
+    *err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, device_id, NULL);
+    if(*err != CL_SUCCESS){
+        printf("Error getting device id from deviceName function\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char* nameOfDevice = (char*)malloc(sizeof(char)*128);
+    *err = clGetDeviceInfo(*device_id, CL_DEVICE_NAME, sizeof(char)*128, nameOfDevice, NULL);
+    if(*err != CL_SUCCESS){
+        printf("Error getting device name from deviceName function\n");
+        exit(EXIT_FAILURE);
+    }
+    return nameOfDevice;
+}
+
 
 int main(int argc, const char * argv[]) {
     cl_int err;                    //varible to track errors
