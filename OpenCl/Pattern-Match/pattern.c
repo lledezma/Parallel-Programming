@@ -180,7 +180,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = MaxCompUnits();   //number of global work items
+    globalWorkSize = MaxCompUnits(&device_id, &err);   //number of global work items
     localWorkSize = globalWorkSize/4;  //number of work items per group
 
     //Execute the kernel
