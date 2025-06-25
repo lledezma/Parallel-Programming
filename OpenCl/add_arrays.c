@@ -175,7 +175,7 @@ int main(int argc, const char * argv[]) {
         return EXIT_FAILURE;
     }
     
-    globalWorkSize = maxProcElements();      //number of global work items
+    globalWorkSize = maxProcElements(&device_id, &err);      //number of global work items
     localWorkSize = 2;          	 //number of work items per group
     
     //Execute the kernel
@@ -196,7 +196,7 @@ int main(int argc, const char * argv[]) {
     }
     
 ///*   print device info, compute units, and results
-    printf("Running on device: %s with %d processing elements.\n", nameOfDevice, maxProcElements());
+    printf("Running on device: %s with %d processing elements.\n", nameOfDevice, maxProcElements(&device_id, &err));
     for(int i = 0; i < num; i++){
         printf("%d   =   %d  +   %d\n", h_c[i], h_a[i], h_b[i]);
     }
