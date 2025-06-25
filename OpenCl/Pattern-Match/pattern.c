@@ -44,29 +44,19 @@ long LoadOpenFile(char const* path, char **buf){
 //get the max compute units available
 int MaxCompUnits(cl_device_id* device_id, cl_int* err){
     cl_uint maxComputeUnits;
-    *err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, device_id, NULL);
-    if(*err != CL_SUCCESS){
-        printf("Error getting device id from maxCompUnits function\n");
-        return EXIT_FAILURE;
-    }
     
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
     if(*err != CL_SUCCESS){
         printf("Error getting device info from maxCompUnits function\n");
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
     return maxComputeUnits;
 }
 
 //get the name of device
 const char* deviceName(cl_device_id* device_id, cl_int* err){
-    *err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, device_id, NULL);
-    if(*err != CL_SUCCESS){
-        printf("Error getting device id from deviceName function\n");
-        exit(EXIT_FAILURE);
-    }
-
     char* nameOfDevice = (char*)malloc(sizeof(char)*128);
+
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_NAME, sizeof(char)*128, nameOfDevice, NULL);
     if(*err != CL_SUCCESS){
         printf("Error getting device name from deviceName function\n");
