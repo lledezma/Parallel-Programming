@@ -185,6 +185,8 @@ void *routine(void* structData)
   clReleaseProgram(program);
   clReleaseKernel(kernel);
   clReleaseCommandQueue(queue);
+
+  return NULL;
 }
 
 int main()
