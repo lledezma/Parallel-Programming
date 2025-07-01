@@ -173,7 +173,6 @@ void *routine(void* structData)
   clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(time_end), &time_end, NULL);
   double nanoSeconds = time_end-time_start;
   //*   print device info, compute units, processing elements and results
-  printf("Thread id: %d\n", data->thread_id);
   printf("Running on device: %s with %d compute units.\n", nameOfDevice, maxComputeUnits);
   printf("OpenCl Execution time is: %0.3f milliseconds. \n\n",nanoSeconds / 1000000.0);
 
