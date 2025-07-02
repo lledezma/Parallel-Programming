@@ -30,14 +30,14 @@ int maxProcElements(cl_device_id* device_id, cl_int* err){
     
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
     if(*err != CL_SUCCESS){
-        printf("Error getting device info from maxCompUnits function\n");
+        printf("Error getting device Max Compute Units.\n");
         exit(EXIT_FAILURE);
     }
 
     size_t maxWorkItems;    //max work items per group
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(maxWorkItems), &maxWorkItems, NULL);
     if(*err != CL_SUCCESS){
-        printf("Error getting device info from maxWorkItems function\n");
+        printf("Error getting device Max Work Items.\n");
         exit(EXIT_FAILURE);
     }
     return (maxComputeUnits*maxWorkItems);

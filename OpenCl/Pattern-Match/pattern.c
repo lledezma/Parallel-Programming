@@ -47,7 +47,7 @@ int MaxCompUnits(cl_device_id* device_id, cl_int* err){
     
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
     if(*err != CL_SUCCESS){
-        printf("Error getting device info from maxCompUnits function\n");
+        printf("Error getting device Max Compute Units.\n");
         exit(EXIT_FAILURE);
     }
     return maxComputeUnits;
@@ -59,7 +59,7 @@ const char* deviceName(cl_device_id* device_id, cl_int* err){
 
     *err = clGetDeviceInfo(*device_id, CL_DEVICE_NAME, sizeof(char)*128, nameOfDevice, NULL);
     if(*err != CL_SUCCESS){
-        printf("Error getting device name from deviceName function\n");
+        printf("Error getting device name.\n");
         exit(EXIT_FAILURE);
     }
     return nameOfDevice;
