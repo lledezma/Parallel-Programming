@@ -25,8 +25,6 @@ const char *KernelSource =                                    "\n"
 "     }                                                        \n"
 "}                                                             \n";
 
-int gpuUnits(); //get the max compute units available
-
 int main(int argc, const char * argv[]) {
     cl_int err;                    //varible to track errors
     cl_platform_id platform;
@@ -195,23 +193,5 @@ int main(int argc, const char * argv[]) {
     free(h_c);
     
     return 0;
-}
-
-int gpuUnits(){
-    int err;
-    cl_device_id device_id;
-    cl_uint maxComputeUnits;
-    err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &device_id, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device id from gpuUnits function\n");
-        return EXIT_FAILURE;
-    }
-    
-    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(maxComputeUnits), &maxComputeUnits, NULL);
-    if(err != CL_SUCCESS){
-        printf("Error getting device info from gpuUnits function\n");
-        return EXIT_FAILURE;
-    }
-    return maxComputeUnits;
 }
 
