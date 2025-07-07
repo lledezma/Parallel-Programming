@@ -196,14 +196,9 @@ int main()
   cl_context context;
   cl_uint num_devices;      //number of devices found
 
-  //declaring host variables
-  int* h_a;
-  int* h_b;
-
-  //initializing host memory
-  size_t bytes = num*sizeof(int);
-  h_a = (int*)malloc(bytes);
-  h_b = (int*)malloc(bytes);
+  //declaring and initializing host variables
+  int* h_a = (int*)malloc(num*sizeof(int));
+  int* h_b = (int*)malloc(num*sizeof(int));
 
   for(int i = 0; i < num; i++){
       h_a[i] = i+1;
