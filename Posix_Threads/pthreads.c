@@ -2,6 +2,7 @@
 			//to find min value. Multithreading program using POSIX Threads
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <pthread.h>
 
 //Global variables and Shared variables
