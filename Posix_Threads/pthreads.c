@@ -8,6 +8,8 @@
 //Global variables and Shared variables
 
 pthread_mutex_t pmutex;	//mutex lock
+pthread_barrier_t pbarrier; //barrier for sync
+
 int  a[100];
 int  b[100];
 int  c[100];	//array to store the sums of a and b arrays
@@ -20,6 +22,7 @@ void *minVal(void* threadid); //function to find the min value in c array (Prefi
 int main(){
 	pthread_t thread[num_of_threads]; 	//thread pool
 	pthread_mutex_init(&pmutex,NULL);	//initializing lock
+	pthread_barrier_init(&pbarrier, NULL, num_of_threads); // init barrier
 
 	//Initializing our a and b arrays
 	for(int j = 0; j<n;j++){	
@@ -28,20 +31,13 @@ int main(){
 	}
 
 	long i;
-	for(i =	0; i< num_of_threads; i++){	//Fork
-		pthread_create(&thread[i], NULL, mySum, (void*) i );
-		sleep(1);	//pause for 1 sec
-	}
-	for(i =	0; i< num_of_threads; i++)	//Join
-		pthread_join(thread[i], NULL);
-
 	for(i =	0; i< num_of_threads; i++)	//Fork
-		pthread_create(&thread[i], NULL, minVal, (void*) i );
-	
+		pthread_create(&thread[i], NULL, mySum, (void*) i );
 	for(i =	0; i< num_of_threads; i++)	//Join
 		pthread_join(thread[i], NULL);
 
 	printf("the min value is: %d\n", c[n-1]); //print the min value in the array
+	pthread_barrier_destroy(&pbarrier);
 	return 0;
 }
 
@@ -53,7 +49,10 @@ void *mySum(void* threadid){		//function to add our arrays
 		printf("%d, ", c[idx]);		
 		idx+=num_of_threads;		//increment thread index by adding total number of threads
 	}
+
 	printf("\n");
+	pthread_barrier_wait(&pbarrier);
+	minVal(threadid);
 	return NULL;
 }
 
