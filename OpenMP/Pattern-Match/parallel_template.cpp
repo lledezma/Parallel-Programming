@@ -10,93 +10,6 @@ using namespace std;
 int badchar[256];
 int global_count;
 
-char* loadFile(const char* fileName, int& fsize);
-void ParallelMatchNaive(const char* txt, int N, const char* pat, int M);
-void ParallelMatchBoyerMoore(const char* txt, int N, const char* pat, int M);
-
-
-
-int main() {
-    const int MAXCHAR = 0;
-    const char* text = loadFile("textdata.txt", MAXCHAR);
-
-    if (text == nullptr) {
-        printf("Failure at opening text file!\n");
-        return 0;
-    }
-
-    int N = strlen(text);
-    const int PATTERN_COUNT = 5;
-    const char* pattern[PATTERN_COUNT] = { "and","fanny","removing", "possible humoured", "six hearted hundred towards" };
-
-    int countNaive = 0;
-    int countBoyer = 0;
-    double eTimeNaive = 0;
-    double eTimeBoyer = 0;
-    StopWatch sw;
-
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("|%-30s|%-21s|%-21s|\n", "SERIAL", "NAIVE", "BOYER_MOORE");
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("|%-30s|%-10s|%-10s|%-10s|%-10s|\n", "Pattern", "Count", "Time(ms)", "Count", "Time(ms)");
-    printf("+------------------------------+---------------------+---------------------+\n");
-    for (int i = 0; i < PATTERN_COUNT; i++)
-    {
-        int M = strlen(pattern[i]);
-        preprocessHeuristicArray(pattern[i], M, badchar);
-
-        sw.start();
-        countNaive = NaiveMatch(text, N, pattern[i], M);
-        sw.stop();
-        eTimeNaive = sw.elapsedTime();
-
-        sw.start();
-        countBoyer = BoyerMooreMatch(text, N, pattern[i], M, badchar);
-        sw.stop();
-        eTimeBoyer = sw.elapsedTime();
-
-        printf("|%-30s|%-10d|%-10.4lf|%-10d|%-10.4lf|\n", pattern[i], countNaive, eTimeNaive, countBoyer, eTimeBoyer);
-    }
-
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("\n\n");
-
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("|%-30s|%-21s|%-21s|\n", "PARALLEL", "NAIVE", "BOYER_MOORE");
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("|%-30s|%-10s|%-10s|%-10s|%-10s|\n", "Pattern", "Count", "Time(ms)", "Count", "Time(ms)");
-    printf("+------------------------------+---------------------+---------------------+\n");
-    for (int i = 0; i < PATTERN_COUNT; i++) 
-    {
-        int M = strlen(pattern[i]);
-        preprocessHeuristicArray(pattern[i], M, badchar);
-
-        global_count = 0;
-        sw.start();
-#pragma omp parallel num_threads(4)
-        ParallelMatchNaive(text, N, pattern[i], M);
-        sw.stop();
-        eTimeNaive = sw.elapsedTime();
-        countNaive = global_count;
-
-
-        global_count = 0;
-        sw.start();
-#pragma omp parallel num_threads(4)
-        ParallelMatchBoyerMoore(text, N, pattern[i], M);
-        sw.stop();
-        eTimeBoyer = sw.elapsedTime();
-        countBoyer = global_count;
-
-        printf("|%-30s|%-10d|%-10.4lf|%-10d|%-10.4lf|\n", pattern[i], countNaive, eTimeNaive, countBoyer, eTimeBoyer);
-    }
-    printf("+------------------------------+---------------------+---------------------+\n");
-    printf("\n\n");
-
-}
-
-
-
 void ParallelMatchNaive(const char* txt, int N, const char* pat, int M) {
     int thread_id = omp_get_thread_num();
     int thread_count = omp_get_num_threads();
@@ -180,3 +93,83 @@ char* loadFile(const char* fileName, int& fsize) {
     content[fsize] = '\0';
     return content;
 }
+
+int main() {
+    const int MAXCHAR = 0;
+    const char* text = loadFile("textdata.txt", MAXCHAR);
+
+    if (text == nullptr) {
+        printf("Failure at opening text file!\n");
+        return 0;
+    }
+
+    int N = strlen(text);
+    const int PATTERN_COUNT = 5;
+    const char* pattern[PATTERN_COUNT] = { "and","fanny","removing", "possible humoured", "six hearted hundred towards" };
+
+    int countNaive = 0;
+    int countBoyer = 0;
+    double eTimeNaive = 0;
+    double eTimeBoyer = 0;
+    StopWatch sw;
+
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("|%-30s|%-21s|%-21s|\n", "SERIAL", "NAIVE", "BOYER_MOORE");
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("|%-30s|%-10s|%-10s|%-10s|%-10s|\n", "Pattern", "Count", "Time(ms)", "Count", "Time(ms)");
+    printf("+------------------------------+---------------------+---------------------+\n");
+    for (int i = 0; i < PATTERN_COUNT; i++)
+    {
+        int M = strlen(pattern[i]);
+        preprocessHeuristicArray(pattern[i], M, badchar);
+
+        sw.start();
+        countNaive = NaiveMatch(text, N, pattern[i], M);
+        sw.stop();
+        eTimeNaive = sw.elapsedTime();
+
+        sw.start();
+        countBoyer = BoyerMooreMatch(text, N, pattern[i], M, badchar);
+        sw.stop();
+        eTimeBoyer = sw.elapsedTime();
+
+        printf("|%-30s|%-10d|%-10.4lf|%-10d|%-10.4lf|\n", pattern[i], countNaive, eTimeNaive, countBoyer, eTimeBoyer);
+    }
+
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("\n\n");
+
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("|%-30s|%-21s|%-21s|\n", "PARALLEL", "NAIVE", "BOYER_MOORE");
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("|%-30s|%-10s|%-10s|%-10s|%-10s|\n", "Pattern", "Count", "Time(ms)", "Count", "Time(ms)");
+    printf("+------------------------------+---------------------+---------------------+\n");
+    for (int i = 0; i < PATTERN_COUNT; i++) 
+    {
+        int M = strlen(pattern[i]);
+        preprocessHeuristicArray(pattern[i], M, badchar);
+
+        global_count = 0;
+        sw.start();
+#pragma omp parallel num_threads(4)
+        ParallelMatchNaive(text, N, pattern[i], M);
+        sw.stop();
+        eTimeNaive = sw.elapsedTime();
+        countNaive = global_count;
+
+
+        global_count = 0;
+        sw.start();
+#pragma omp parallel num_threads(4)
+        ParallelMatchBoyerMoore(text, N, pattern[i], M);
+        sw.stop();
+        eTimeBoyer = sw.elapsedTime();
+        countBoyer = global_count;
+
+        printf("|%-30s|%-10d|%-10.4lf|%-10d|%-10.4lf|\n", pattern[i], countNaive, eTimeNaive, countBoyer, eTimeBoyer);
+    }
+    printf("+------------------------------+---------------------+---------------------+\n");
+    printf("\n\n");
+
+}
+

@@ -2,11 +2,27 @@
 #include <stdio.h>
 #include <string.h>
 
-//naive pattern match
-int pattern_match(const char* sequence, const char* pattern, int seq_length, int pat_length);
 int process_size; //number of processes
 int process_id;   //process rank(id)
 
+//naive pattern match
+int pattern_match(const char* sequence, const char* pattern, int seq_length, int pat_length)
+{
+  int idx = process_id;     //process id
+  int localCount = 0;       //local match count
+  int i = 0;
+
+  while(idx <= seq_length-pat_length){
+    if(pattern[i] != sequence[idx+i] || i == pat_length){
+      if(i == pat_length)
+        localCount++; //if i == pat_length, add 1 to localCount
+      i = -1; //reset i variable
+      idx += process_size; //increment our thread index
+    }
+    i++;
+  }
+  return localCount;
+}
 
 int main()
 {
@@ -55,22 +71,4 @@ int main()
 	MPI_Finalize(); //Shut down MPI
 	return 0;
 
-}
-
-int pattern_match(const char* sequence, const char* pattern, int seq_length, int pat_length)
-{
-  int idx = process_id;     //process id
-  int localCount = 0;       //local match count
-  int i = 0;
-
-  while(idx <= seq_length-pat_length){
-    if(pattern[i] != sequence[idx+i] || i == pat_length){
-      if(i == pat_length)
-        localCount++; //if i == pat_length, add 1 to localCount
-      i = -1; //reset i variable
-      idx += process_size; //increment our thread index
-    }
-    i++;
-  }
-  return localCount;
 }

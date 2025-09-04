@@ -11,8 +11,37 @@ int A[number][number];
 int B[number][number];
 int C[number][number];
 
-void generatematrices();
-void multiplication(int(*A)[number], int(*B)[number], int(*C)[number], int n);
+void multiplication(int(*A)[number], int(*B)[number], int(*C)[number], int n) {
+	int mythread = omp_get_thread_num();
+	int numthreads = omp_get_num_threads();
+	int totalsum = 0;
+	for (int i = mythread; i < n; i += numthreads) {
+		for (int h = 0; h < n; h++) {
+			totalsum += (A[i][h] * B[h][mythread]);
+		}
+		C[i][mythread] = totalsum;
+		totalsum = 0;
+		for (int j = mythread + 1; j % n != mythread; j++) {
+			for (int x = 0; x < n; x++) {
+
+				totalsum += (A[i][x] * B[x][j]);
+			}
+			C[i][j] = totalsum;
+			totalsum = 0;
+		}
+	}
+
+}
+
+void generatematrices() {
+	for (int i = 0; i < number; i++) {
+		for (int j = 0; j < number; j++) {
+			A[i][j] = (rand() % 20) + 1;
+			B[i][j] = (rand() % 20) + 1;
+		}
+	}
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -68,36 +97,5 @@ int main(int argc, char* argv[])
 			printf("%d  ", C[i][j]);
 		}
 		printf("\n");
-	}
-}
-
-void multiplication(int(*A)[number], int(*B)[number], int(*C)[number], int n) {
-	int mythread = omp_get_thread_num();
-	int numthreads = omp_get_num_threads();
-	int totalsum = 0;
-	for (int i = mythread; i < n; i += numthreads) {
-		for (int h = 0; h < n; h++) {
-			totalsum += (A[i][h] * B[h][mythread]);
-		}
-		C[i][mythread] = totalsum;
-		totalsum = 0;
-		for (int j = mythread + 1; j % n != mythread; j++) {
-			for (int x = 0; x < n; x++) {
-
-				totalsum += (A[i][x] * B[x][j]);
-			}
-			C[i][j] = totalsum;
-			totalsum = 0;
-		}
-	}
-
-}
-
-void generatematrices() {
-	for (int i = 0; i < number; i++) {
-		for (int j = 0; j < number; j++) {
-			A[i][j] = (rand() % 20) + 1;
-			B[i][j] = (rand() % 20) + 1;
-		}
 	}
 }

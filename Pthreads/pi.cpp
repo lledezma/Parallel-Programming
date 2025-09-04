@@ -1,33 +1,13 @@
 				//Multithreading program to find pi = 3.14 value.
 #include <iostream>
 #include<thread>
-using namespace std;
 
-void myPrint(int myrank);
-float f(float x);
+using namespace std;
 
 int uni_num_threads;
 float myresult;
 
-int main()
-{
-	int num_threads = 6;
-	uni_num_threads = num_threads;
-	thread* t = new thread[num_threads];
-
-	for(int i = 0; i < num_threads; i++) {
-		t[i] = thread(myPrint, i);
-		this_thread::sleep_for(5ms);
-	}
-
-	for(int i = 0; i < num_threads; i++) {
-		t[i].join();
-	}
-	cout << "pi = " << myresult << endl;
-	return 0;
-}
-
-void myPrint(int myrank) {
+void printResults(int myrank) {
 	float a = 0.0;
 	float b =1.0;
 	float n = 1000000;
@@ -48,4 +28,22 @@ float f(float x) {
 	float sol;
 	sol = (4.0) / ((1+(x*x)));
 	return sol;
+}
+
+int main()
+{
+	int num_threads = 6;
+	uni_num_threads = num_threads;
+	thread* t = new thread[num_threads];
+
+	for(int i = 0; i < num_threads; i++) {
+		t[i] = thread(printResults, i);
+		this_thread::sleep_for(5ms);
+	}
+
+	for(int i = 0; i < num_threads; i++) {
+		t[i].join();
+	}
+	cout << "pi = " << myresult << endl;
+	return 0;
 }

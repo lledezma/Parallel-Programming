@@ -4,7 +4,17 @@
 #include <math.h>
 using namespace std;
                             //Computing the Mathematical Constant e=2.71828 using OpenMP
-signed  long long factorial(int n);
+
+signed long long factorial(int n) {
+    long double result = 1;
+    if(n == 0)
+        return result;
+    for(int i = 1; i <=n; ++i) {
+        result *= i;
+    }
+    return result;
+}
+
 int main()
 {
     int samples[] = {100,500,1000,10000,30000};
@@ -27,14 +37,4 @@ int main()
         }
     }
     return 0;
-}
-
-signed long long factorial(int n) {
-    long double result = 1;
-    if(n == 0)
-        return result;
-    for(int i = 1; i <=n; ++i) {
-        result *= i;
-    }
-    return result;
 }

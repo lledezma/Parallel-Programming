@@ -3,7 +3,9 @@
 #include <omp.h> 
 #include <StopWatch.h> 
 #include <tgmath.h> 
+
 using namespace std;
+
 int main()
 {
     StopWatch sw;
